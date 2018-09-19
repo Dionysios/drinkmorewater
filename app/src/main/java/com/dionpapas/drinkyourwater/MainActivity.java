@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -57,5 +59,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
 
+    }
+
+    public void incrementWater(View view) {
+        //todo add logic here
+//        if (mToast != null) mToast.cancel();
+//        mToast = Toast.makeText(this, R.string.water_chug_toast, Toast.LENGTH_SHORT);
+//        mToast.show();
+//
+//        Intent incrementWaterCountIntent = new Intent(this, WaterReminderIntentService.class);
+//        incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+//        startService(incrementWaterCountIntent);
     }
 }

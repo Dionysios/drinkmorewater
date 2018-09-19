@@ -3,6 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="disable_notif">Inactive</string>
     <string name="enable">Active</string>
+    <string name="instructions_msg">Press the icon if have drunk some water</string>
+    <string name="water_increment_content_desc">Press to add water</string>
     <string name="enable_notif_title">Enable notifications</string>
     <string name="enable_notif_key" translatable="false">enable_notif</string>
+    <string name="default_water_count">0</string>
 </resources>
