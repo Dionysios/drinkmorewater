@@ -23,11 +23,12 @@
 
         <ImageButton
             android:id="@+id/ib_water_increment"
+            android:background="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/water_increment_content_desc"
             android:onClick="incrementWater"
+            android:tint="@android:color/transparent"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_water_glass" />
@@ -63,3 +64,5 @@
     </FrameLayout>
 
 </LinearLayout>
+
+    <!--android:background="?attr/selectableItemBackgroundBorderless"-->

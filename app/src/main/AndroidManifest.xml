@@ -25,6 +25,8 @@
                 android:name="android.support.PARENT_ACTIVTY"
                 android:value=".MainActivity"/>
         </activity>
+        <service
+            android:name=".sync.ReminderIntent"
+            android:exported="false"/>
     </application>
-
 </manifest>

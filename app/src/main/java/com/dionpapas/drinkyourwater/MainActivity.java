@@ -1,5 +1,6 @@
 package com.dionpapas.drinkyourwater;
 
+import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -9,15 +10,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dionpapas.drinkyourwater.sync.ReminderIntent;
+import com.dionpapas.drinkyourwater.sync.ReminderTasks;
+import com.dionpapas.drinkyourwater.utilities.Utilities;
+
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+    private TextView mWaterCountDisplay;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mWaterCountDisplay = (TextView) findViewById(R.id.tv_water_count);
         setupSharedPreferences();
+        updateWaterCount();
+
     }
 
     private void setupSharedPreferences() {
@@ -48,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(getString(R.string.enable_notif_key))){
-            //todo Probably I need some action here
+        if(Utilities.KEY_WATER_COUNT.equals(key)){
+            updateWaterCount();
         }
     }
 
@@ -62,13 +73,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void incrementWater(View view) {
-        //todo add logic here
-//        if (mToast != null) mToast.cancel();
-//        mToast = Toast.makeText(this, R.string.water_chug_toast, Toast.LENGTH_SHORT);
-//        mToast.show();
-//
-//        Intent incrementWaterCountIntent = new Intent(this, WaterReminderIntentService.class);
-//        incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
-//        startService(incrementWaterCountIntent);
+        if (mToast != null) mToast.cancel();
+        mToast = Toast.makeText(this, R.string.water_text_toast, Toast.LENGTH_SHORT);
+        mToast.show();
+
+        Intent incrementWaterCountIntent =  new Intent(this, ReminderIntent.class);
+        incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+        startService(incrementWaterCountIntent);
+
+    }
+
+    private void updateWaterCount() {
+        int waterCount = Utilities.getWaterCount(this);
+        mWaterCountDisplay.setText(waterCount+"");
     }
 }
