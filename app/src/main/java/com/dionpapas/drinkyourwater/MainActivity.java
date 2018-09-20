@@ -1,6 +1,7 @@
 package com.dionpapas.drinkyourwater;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.dionpapas.drinkyourwater.sync.ReminderIntent;
 import com.dionpapas.drinkyourwater.sync.ReminderTasks;
+import com.dionpapas.drinkyourwater.utilities.NotificationBuilder;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mToast = Toast.makeText(this, R.string.water_text_toast, Toast.LENGTH_SHORT);
         mToast.show();
 
+        NotificationBuilder.createNotification(this);
         Intent incrementWaterCountIntent =  new Intent(this, ReminderIntent.class);
         incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
         startService(incrementWaterCountIntent);

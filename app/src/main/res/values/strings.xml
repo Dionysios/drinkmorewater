@@ -8,5 +8,8 @@
     <string name="enable_notif_title">Enable notifications</string>
     <string name="enable_notif_key" translatable="false">enable_notif</string>
     <string name="default_water_count">0</string>
+    <string name="notification_channel_name">Primary</string>
     <string name="water_text_toast">Drinking...Drinking....</string>
+    <string name="charging_reminder_notification_title">Where\'s that water?</string>
+    <string name="charging_reminder_notification_body">There\'s never a better time to drink water than now. Drink up!</string>
 </resources>
