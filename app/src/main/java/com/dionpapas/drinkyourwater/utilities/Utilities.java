@@ -27,4 +27,6 @@ public class Utilities {
         Utilities.setWaterCount(context, ++waterCount);
     }
 
+    public static void sendReminderToUSER(Context context) {
+    }
 }

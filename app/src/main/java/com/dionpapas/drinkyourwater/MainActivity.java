@@ -74,17 +74,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     }
 
+    public void testNotification(View view) {
+        NotificationBuilder.createNotification(this);
+    }
+
     public void incrementWater(View view) {
         if (mToast != null) mToast.cancel();
         mToast = Toast.makeText(this, R.string.water_text_toast, Toast.LENGTH_SHORT);
         mToast.show();
-
-        NotificationBuilder.createNotification(this);
         Intent incrementWaterCountIntent =  new Intent(this, ReminderIntent.class);
         incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
         startService(incrementWaterCountIntent);
-
     }
+
 
     private void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);

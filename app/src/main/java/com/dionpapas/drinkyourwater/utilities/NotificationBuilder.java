@@ -14,12 +14,16 @@ import android.support.v4.content.ContextCompat;
 
 import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
+import com.dionpapas.drinkyourwater.sync.ReminderIntent;
+import com.dionpapas.drinkyourwater.sync.ReminderTasks;
 
 public class NotificationBuilder {
 
     private static final int WATER_REMINDER_INTENT_ID = 1111;
     private static final int WATER_REMINDER_PENDING_INTENT_ID = 3417;
     private static final String WATER_REMINDER_NOTIFICATION_CHANNEL_ID = "reminder_notification_channel";
+    private static final int ACTION_DRINK_WATER_INTENT_ID = 111;
+    private static final int ACTION_IGNORE_WATER_INTENT_ID = 141;
 
     public static void createNotification(Context context){
         NotificationManager notificationManager = (NotificationManager)
@@ -43,6 +47,9 @@ public class NotificationBuilder {
                         context.getString(R.string.charging_reminder_notification_body)))
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
                 .setContentIntent(launchAppIntent(context))
+                .addAction(ignoreDrinkWaterReminder(context))
+                .addAction(drinkWaterReminder(context))
+                .setPriority(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
@@ -67,4 +74,41 @@ public class NotificationBuilder {
         Bitmap notificationIcon = BitmapFactory.decodeResource(res, R.drawable.ic_water_glass);
         return notificationIcon;
     }
+
+    public static void clearNotification(Context context ){
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+    public static NotificationCompat.Action ignoreDrinkWaterReminder (Context context){
+        Intent ignoreDrinkWaterReminderIntent = new Intent(context, ReminderIntent.class);
+        ignoreDrinkWaterReminderIntent.setAction(ReminderTasks.ACTION_DISMISS_NOTIFICATION);
+        PendingIntent ignoreDrinkWaterReminderPendingIntent = PendingIntent.getService(
+                context,
+                ACTION_IGNORE_WATER_INTENT_ID,
+                ignoreDrinkWaterReminderIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+       NotificationCompat.Action ignoreReminderAction =
+               new NotificationCompat.Action(R.drawable.ic_water_glass,"Not now",
+                       ignoreDrinkWaterReminderPendingIntent);
+
+       return ignoreReminderAction;
+    }
+
+    public static NotificationCompat.Action drinkWaterReminder (Context context){
+        Intent drinkWaterReminderIntent = new Intent(context, ReminderIntent.class);
+        drinkWaterReminderIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+        PendingIntent drinkWaterReminderPendingIntent = PendingIntent.getService(
+                context,
+                ACTION_DRINK_WATER_INTENT_ID,
+                drinkWaterReminderIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action drinkingReminderAction =
+                new NotificationCompat.Action(R.drawable.ic_water_glass,"Yes!",
+                        drinkWaterReminderPendingIntent);
+
+        return drinkingReminderAction;
+    }
+
 }
