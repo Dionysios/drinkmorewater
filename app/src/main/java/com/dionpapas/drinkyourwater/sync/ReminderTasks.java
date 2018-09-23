@@ -13,15 +13,18 @@ public class ReminderTasks {
     public static void executeTask(Context context, String action) {
         if (ACTION_INCREMENT_WATER_COUNT.equals(action)) {
             incrementWaterCount(context);
-            Utilities.sendReminderToUSER(context);
+            NotificationBuilder.createNotification(context);
         } else if (ACTION_DISMISS_NOTIFICATION.equals(action)){
             NotificationBuilder.clearNotification(context);
         }
+
     }
 
     private static void incrementWaterCount(Context context) {
         Utilities.incrementWaterCount(context);
-        NotificationBuilder.clearNotification(context);
+        //NotificationBuilder.clearNotification(context);
     }
+
+
 }
 

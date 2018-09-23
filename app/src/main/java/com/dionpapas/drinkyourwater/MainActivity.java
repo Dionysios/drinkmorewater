@@ -1,12 +1,10 @@
 package com.dionpapas.drinkyourwater;
 
-import android.app.IntentService;
-import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,9 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dionpapas.drinkyourwater.sync.FirebaseJob;
 import com.dionpapas.drinkyourwater.sync.ReminderIntent;
 import com.dionpapas.drinkyourwater.sync.ReminderTasks;
-import com.dionpapas.drinkyourwater.utilities.NotificationBuilder;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
@@ -27,10 +25,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mWaterCountDisplay = (TextView) findViewById(R.id.tv_water_count);
+        mWaterCountDisplay = findViewById(R.id.tv_water_count);
         setupSharedPreferences();
         updateWaterCount();
-
+        FirebaseJob.scheduleReminder(this);
     }
 
     private void setupSharedPreferences() {
@@ -74,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     }
 
-    public void testNotification(View view) {
-        NotificationBuilder.createNotification(this);
-    }
+//    public void testNotification(View view) {
+//        NotificationBuilder.createNotification(this);
+//    }
 
     public void incrementWater(View view) {
         if (mToast != null) mToast.cancel();

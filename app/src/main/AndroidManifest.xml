@@ -13,7 +13,6 @@
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,5 +27,13 @@
         <service
             android:name=".sync.ReminderIntent"
             android:exported="false"/>
+        <service
+            android:name=".sync.ReminderFireBaseJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
+
 </manifest>
