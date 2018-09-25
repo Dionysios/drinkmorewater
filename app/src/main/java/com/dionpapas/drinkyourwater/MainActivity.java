@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,11 +25,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_2);
         mWaterCountDisplay = findViewById(R.id.tv_water_count);
         setupSharedPreferences();
         updateWaterCount();
+        Log.i("TAG", "Sending 1");
         FirebaseJob.scheduleReminder(this);
+        Log.i("TAG", "Sending 2");
     }
 
     private void setupSharedPreferences() {

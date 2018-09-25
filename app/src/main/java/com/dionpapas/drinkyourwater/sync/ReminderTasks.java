@@ -13,7 +13,7 @@ public class ReminderTasks {
     public static void executeTask(Context context, String action) {
         if (ACTION_INCREMENT_WATER_COUNT.equals(action)) {
             incrementWaterCount(context);
-            NotificationBuilder.createNotification(context);
+            //NotificationBuilder.createNotification(context);
         } else if (ACTION_DISMISS_NOTIFICATION.equals(action)){
             NotificationBuilder.clearNotification(context);
         }
@@ -25,6 +25,17 @@ public class ReminderTasks {
         //NotificationBuilder.clearNotification(context);
     }
 
+    synchronized public static void syncWeather(Context context) {
+
+        try {
+
+            NotificationBuilder.createNotification(context);
+
+        } catch (Exception e) {
+            /* Server probably invalid */
+            e.printStackTrace();
+        }
+    }
 
 }
 
