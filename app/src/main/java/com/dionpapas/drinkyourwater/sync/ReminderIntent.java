@@ -14,5 +14,7 @@ public class ReminderIntent extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         String action = intent.getAction();
         ReminderTasks.executeTask(this,action);
+        ReminderTasks.syncWeather(this);
     }
+
 }

@@ -27,10 +27,11 @@ public class SunshineFirebaseJobService extends JobService {
      */
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        Log.i("TAG", "Sending 9");
+        Log.i("TAG", "Sending 5");
         mFetchWeatherTask = new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... voids) {
+                Log.i("TAG", "Sending 6");
                 Context context = getApplicationContext();
                 ReminderTasks.syncWeather(context);
                 //ReminderTasks.executeTask(context, ReminderTasks.ACTION_INCREMENT_WATER_COUNT);

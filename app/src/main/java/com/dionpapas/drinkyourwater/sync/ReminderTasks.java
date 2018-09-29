@@ -1,6 +1,7 @@
 package com.dionpapas.drinkyourwater.sync;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dionpapas.drinkyourwater.utilities.NotificationBuilder;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
@@ -26,7 +27,7 @@ public class ReminderTasks {
     }
 
     synchronized public static void syncWeather(Context context) {
-
+        Log.i("TAG", "Sending 8");
         try {
 
             NotificationBuilder.createNotification(context);

@@ -1,6 +1,7 @@
 package com.dionpapas.drinkyourwater.sync;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,7 +11,6 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
@@ -20,19 +20,19 @@ public class FirebaseJob {
     public static final int REMINDER_INTERVAL_MINUTES = 1;
     public static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     public static final int REMINDER_WINDOW_TIME = REMINDER_INTERVAL_SECONDS;
-    public static final String FIREBASE_REMINDER_TAG = "reminder_tag";
+    public static final String FIREBASE_REMINDER_TAG = "reminder_sync";
     private static boolean sInitialized;
 
     private static final int SYNC_INTERVAL_HOURS = 1;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
-    synchronized public static void scheduleReminder(@NonNull final Context context) {
+    synchronized public static void initiaze(@NonNull final Context context) {
         if (sInitialized) return;
         sInitialized = true;
         Log.i("TAG", "Sending 3");
         scheduleFirebaseJobDispatcherSync(context);
-        Log.i("TAG", "Sending 4");
+        startImmediateSync(context);
 //        Driver driver = new GooglePlayDriver(context);
 //        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 //
@@ -59,10 +59,10 @@ public class FirebaseJob {
     }
 
     static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
-
+        Log.i("TAG", "Sending 4");
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
-        Log.i("TAG", "Sending 5");
+
         /* Create the Job to periodically sync Sunshine */
         Job syncSunshineJob = dispatcher.newJobBuilder()
                 /* The Service that will be used to sync Sunshine's data */
@@ -104,8 +104,11 @@ public class FirebaseJob {
                 .build();
 
         /* Schedule the Job with the dispatcher */
-        Log.i("TAG", "Sending 6");
         dispatcher.schedule(syncSunshineJob);
-        Log.i("TAG", "Sending 7");
+    }
+
+    public static void startImmediateSync(@NonNull final Context context) {
+        Intent intentToSyncImmediately = new Intent(context, ReminderIntent.class);
+        context.startService(intentToSyncImmediately);
     }
 }

@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
         updateWaterCount();
         Log.i("TAG", "Sending 1");
-        FirebaseJob.scheduleReminder(this);
-        Log.i("TAG", "Sending 2");
+        FirebaseJob.initiaze(this);
+
     }
 
     private void setupSharedPreferences() {
