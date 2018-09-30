@@ -27,21 +27,23 @@ public class SunshineFirebaseJobService extends JobService {
      */
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        Log.i("TAG", "Sending 5");
-        mFetchWeatherTask = new AsyncTask<Void, Void, Void>(){
+        Log.d("TAG", "Sending 5");
+        mFetchWeatherTask = new AsyncTask() {
             @Override
-            protected Void doInBackground(Void... voids) {
-                Log.i("TAG", "Sending 6");
+            protected Void doInBackground(Object[] params) {
+                Log.d("TAG", "Sending 6");
                 Context context = getApplicationContext();
-                ReminderTasks.syncWeather(context);
-                //ReminderTasks.executeTask(context, ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+                //ReminderTasks.sendNotification(context);
+                ReminderTasks.executeTask(context, ReminderTasks.SEND_NOTIFICATION);
                 jobFinished(jobParameters, false);
                 return null;
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
-                jobFinished(jobParameters, false);
+            protected void onPostExecute(Object o) {
+                Log.d("TAG", "Sending 11");
+                Log.d("TAG", "Finished job " + jobParameters.toString());
+                jobFinished(jobParameters,false );
             }
         };
 

@@ -30,14 +30,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
         updateWaterCount();
         Log.i("TAG", "Sending 1");
-        FirebaseJob.initiaze(this);
-
+        //FirebaseJob.initiaze(this);
     }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
+          sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
                 getResources().getBoolean(R.bool.pref_enable_notif));
+        FirebaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
+                getResources().getBoolean(R.bool.pref_enable_notif)));
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
     }
@@ -64,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(Utilities.KEY_WATER_COUNT.equals(key)){
             updateWaterCount();
+        } else if(key.equals(sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
+                getResources().getBoolean(R.bool.pref_enable_notif)))){
+            FirebaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
+                    getResources().getBoolean(R.bool.pref_enable_notif)));
         }
     }
 
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mToast = Toast.makeText(this, R.string.water_text_toast, Toast.LENGTH_SHORT);
         mToast.show();
         Intent incrementWaterCountIntent =  new Intent(this, ReminderIntent.class);
-        incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+        incrementWaterCountIntent.setAction(ReminderTasks.SEND_NOTIFICATION);
         startService(incrementWaterCountIntent);
     }
 

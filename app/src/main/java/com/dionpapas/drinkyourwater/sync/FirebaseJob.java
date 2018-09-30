@@ -11,25 +11,31 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
 public class FirebaseJob {
 
-    public static final int REMINDER_INTERVAL_MINUTES = 1;
-    public static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
-    public static final int REMINDER_WINDOW_TIME = REMINDER_INTERVAL_SECONDS;
+    private static final int REMINDER_INTERVAL_MINUTES = 1;
+    private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+    private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
+
+//    public static final int REMINDER_INTERVAL_MINUTES = 1;
+//    public static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+//    public static final int REMINDER_WINDOW_TIME = REMINDER_INTERVAL_SECONDS;
     public static final String FIREBASE_REMINDER_TAG = "reminder_sync";
     private static boolean sInitialized;
 
     private static final int SYNC_INTERVAL_HOURS = 1;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_HOURS);
-    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
+   // private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
-    synchronized public static void initiaze(@NonNull final Context context) {
+    synchronized public static void initiaze(@NonNull final Context context , boolean activate) {
         if (sInitialized) return;
         sInitialized = true;
+        if (!activate) return;
         Log.i("TAG", "Sending 3");
         scheduleFirebaseJobDispatcherSync(context);
         startImmediateSync(context);
@@ -76,10 +82,6 @@ public class FirebaseJob {
                  * as some users may not want to download any data on their mobile plan. ($$$)
                  */
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                /*
-                 * setLifetime sets how long this job should persist. The options are to keep the
-                 * Job "forever" or to have it die the next time the device boots up.
-                 */
                 .setLifetime(Lifetime.FOREVER)
                 /*
                  * We want Sunshine's weather data to stay up to date, so we tell this Job to recur.
@@ -93,22 +95,19 @@ public class FirebaseJob {
                  * guaranteed, but is more of a guideline for FirebaseJobDispatcher to go off of.
                  */
                 .setTrigger(Trigger.executionWindow(
-                        SYNC_INTERVAL_SECONDS,
-                        SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
-                /*
-                 * If a Job with the tag with provided already exists, this new job will replace
-                 * the old one.
-                 */
+                        REMINDER_INTERVAL_SECONDS,
+                        REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
                 .setReplaceCurrent(true)
-                /* Once the Job is ready, call the builder's build method to return the Job */
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
                 .build();
 
-        /* Schedule the Job with the dispatcher */
         dispatcher.schedule(syncSunshineJob);
     }
 
     public static void startImmediateSync(@NonNull final Context context) {
-        Intent intentToSyncImmediately = new Intent(context, ReminderIntent.class);
+       Intent intentToSyncImmediately = new Intent(context, ReminderIntent.class);
+//        context.startService(intentToSyncImmediately);
+        intentToSyncImmediately.setAction(ReminderTasks.SEND_NOTIFICATION);
         context.startService(intentToSyncImmediately);
     }
 }

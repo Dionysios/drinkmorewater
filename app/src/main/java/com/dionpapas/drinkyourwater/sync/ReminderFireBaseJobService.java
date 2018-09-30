@@ -13,22 +13,23 @@ public class ReminderFireBaseJobService extends JobService{
 
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        Log.i("TAG", "Sending 8");
+        Log.d("TAG", "Sending 8");
         mTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                Log.i("TAG", "Sending 9");
+                Log.d("TAG", "Sending 9");
                 Context context = ReminderFireBaseJobService.this;
-                Log.i("TAG", "Sending 10");
-                ReminderTasks.executeTask(context, ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+                Log.d("TAG", "Sending 10");
+                //ReminderTasks.executeTask(context, ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
+                ReminderTasks.executeTask(context, ReminderTasks.SEND_NOTIFICATION);
                 jobFinished(jobParameters, false);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Object o) {
-                Log.i("TAG", "Sending 11");
-                Log.i("TAG", "Finished job " + jobParameters.toString());
+                Log.d("TAG", "Sending 11");
+                Log.d("TAG", "Finished job " + jobParameters.toString());
                 jobFinished(jobParameters,false );
             }
         };
