@@ -1,0 +1,19 @@
+0000000000000000000000000000000000000000 2187f8ff7ff9229e81672c91969089b3a766cb34 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537306186 +0200	initial pull
+2187f8ff7ff9229e81672c91969089b3a766cb34 74df63a467f1e213b1329df12452abfb41fa4f7b Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537306277 +0200	commit: Initial commit
+74df63a467f1e213b1329df12452abfb41fa4f7b f21c53f3ab038a6efb6d6e597b8f6ff44071c39a Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537306416 +0200	commit: Updating gitignore
+f21c53f3ab038a6efb6d6e597b8f6ff44071c39a b97f1906d2e9b8750f6b4e95701203f6251ac508 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537306600 +0200	commit: updating gitignore
+b97f1906d2e9b8750f6b4e95701203f6251ac508 62519a01c9b9893314cabe044fad72aa6861d5e8 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537306738 +0200	commit: Remove idea files
+62519a01c9b9893314cabe044fad72aa6861d5e8 ce0ad719c7ba627f513676af4f090f74c833cd8a Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537379553 +0200	commit: Adding settings Activity
+ce0ad719c7ba627f513676af4f090f74c833cd8a 7e6408431d590b0bfe739b99d496d70959232f54 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537381304 +0200	commit: Adding preference Fragment
+7e6408431d590b0bfe739b99d496d70959232f54 567ee7736f900cba819d26929961d378c342b6d2 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537384589 +0200	commit: Finishing working with Preferences. Start work on the Notification
+567ee7736f900cba819d26929961d378c342b6d2 b5655072057e9e33dff282b139cde88e19e5d411 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537387217 +0200	commit: Adding some UI on the MainActivity
+b5655072057e9e33dff282b139cde88e19e5d411 4eaa352d2fa8e5ef46bb97543678adedf13160f0 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537397210 +0200	commit: Simple UI working, adding intents for updating values
+4eaa352d2fa8e5ef46bb97543678adedf13160f0 6bb5f0317bf1f83b67567f2dcbad1059f4e20799 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537475996 +0200	commit: Adding missing files
+6bb5f0317bf1f83b67567f2dcbad1059f4e20799 451a69ae6d06daa45d5493a9c29e3699b88ce8d1 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537480170 +0200	commit: Adding simple notification on click
+451a69ae6d06daa45d5493a9c29e3699b88ce8d1 af7ba1d82b29f0ca679613ca4927905fbd7ec70f Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537605321 +0200	commit: Adding actions on Notification and start working on the JobService
+af7ba1d82b29f0ca679613ca4927905fbd7ec70f 72489d74bfa462b526c21a22cf1160bcd317af1e Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537740639 +0200	commit: Finalizing scheduling job but the notifications are not showing up :-(
+72489d74bfa462b526c21a22cf1160bcd317af1e 0fd2b74b79c7849eeb6d74b0d1e0c9cf75cba279 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537906908 +0200	pull origin master: Fast-forward
+0fd2b74b79c7849eeb6d74b0d1e0c9cf75cba279 5c81c605207ab4d55b5a9c7fcf88b3d4562722f1 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537906927 +0200	commit: Adding missing file
+5c81c605207ab4d55b5a9c7fcf88b3d4562722f1 c2274bddbfa3e54e1191b77ece2582b9b37b71d3 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1537912012 +0200	commit: Keep trying to make notifications to work
+c2274bddbfa3e54e1191b77ece2582b9b37b71d3 245b9b0499fab3b93f480c1e36392023842d356c Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1538257290 +0200	commit: Notifications started working :)
+245b9b0499fab3b93f480c1e36392023842d356c 8542025c15eff2161f209283bca8ba009d4aae73 Dionysios Papathanopoulos <dpapathanopoulos@webst.gr> 1538341564 +0200	commit: Notifications only work once
