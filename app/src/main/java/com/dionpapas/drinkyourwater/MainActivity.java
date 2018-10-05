@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.dionpapas.drinkyourwater.utilities.Utilities;
+import com.firebase.jobdispatcher.Constraint;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -26,6 +27,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         FireBaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
                 getResources().getBoolean(R.bool.pref_enable_notif)));
+            boolean isCharging = sharedPreferences.getBoolean(
+                    getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
+            if(isCharging){
+                Log.i("TAG", "onStartJob adding contrain");
+                FireBaseJob.addContrain(Constraint.DEVICE_CHARGING);
+            } else {
+                Log.i("TAG", "onStartJob removing contrain");
+                FireBaseJob.removeContrain(Constraint.DEVICE_CHARGING);
+            }
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -52,15 +62,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Log.i("TAG", "onStartJob something changed" + key);
         if(Utilities.KEY_WATER_COUNT.equals(key)) {
             // updateWaterCount();
-        } else if(key.equals(getString(R.string.enable_notif_key))){
+        } else if(key.equals(getString(R.string.enable_notif_key))) {
             boolean active = sharedPreferences.getBoolean(
-                    getString(R.string.enable_notif_key),getResources().getBoolean(R.bool.pref_enable_notif));
-            if(active){
+                    getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif));
+            if (active) {
                 Log.i("TAG", "onStartJob starting notifications" + active);
                 FireBaseJob.initiaze(this, active);
-            }else {
+            } else {
                 Log.i("TAG", "onStartJob canceling notifications" + active);
                 FireBaseJob.cancelAllReminders();
+            }
+        } else if(key.equals(getString(R.string.notif_when_charging_key))){
+            boolean isCharging = sharedPreferences.getBoolean(
+                    getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
+            if(isCharging){
+                Log.i("TAG", "onStartJob adding contrain");
+                FireBaseJob.addContrain(Constraint.DEVICE_CHARGING);
+            } else {
+                Log.i("TAG", "onStartJob removing contrain");
+                FireBaseJob.removeContrain(Constraint.DEVICE_CHARGING);
             }
         }
     }
