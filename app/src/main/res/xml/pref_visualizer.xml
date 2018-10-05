@@ -5,5 +5,20 @@
         android:key="@string/enable_notif_key"
         android:summaryOff="@string/disable_notif"
         android:summaryOn="@string/enable"
-        android:title="@string/enable_notif_title"/>
+        android:title="@string/enable_notif_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/pref_enable_on_wifi"
+        android:key="@string/notif_on_wifi_key"
+        android:summaryOff="@string/disable_notif"
+        android:summaryOn="@string/enable"
+        android:title="@string/notif_on_wifi_title" />
+
+    <CheckBoxPreference
+        android:layout_width="match_parent"
+        android:defaultValue="@bool/pref_enable_when_charg"
+        android:key="@string/notif_when_charging_key"
+        android:summaryOff="@string/disable_notif"
+        android:summaryOn="@string/enable"
+        android:title="@string/notif_on_wifi_title" />
 </PreferenceScreen>

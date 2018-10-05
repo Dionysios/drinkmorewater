@@ -15,28 +15,32 @@ import com.firebase.jobdispatcher.Trigger;
 import java.util.concurrent.TimeUnit;
 
 class FireBaseJob {
-    private static final int REMINDER_INTERVAL_MINUTES = 10;
+    private static final int REMINDER_INTERVAL_MINUTES = 5;
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS ;
     public static final String FIREBASE_REMINDER_TAG = "my-unique-tag";
-    private static boolean sInitialized = false;
 
-    synchronized public static void initiaze(@NonNull final Context context) {
-        if (sInitialized) return;
+    private static FirebaseJobDispatcher firebaseJobDispatcher;
+
+    synchronized public static void initiaze(@NonNull final Context context, boolean active) {
+        if (!active) return;
         Driver driver = new GooglePlayDriver(context);
-        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
-        Log.i("TAG", "onStartJob initialize");
+        firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
+        Log.i("TAG", "onStartJob initialize with" + active);
         Job constraintReminderJob = firebaseJobDispatcher.newJobBuilder()
                 .setService(ReminderService.class)
                 .setTag(FIREBASE_REMINDER_TAG)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(REMINDER_INTERVAL_SECONDS, REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
+                .setTrigger(Trigger.executionWindow(0, 900 ))
                 .setReplaceCurrent(true)
                 .build();
-
         firebaseJobDispatcher.schedule(constraintReminderJob);
-        sInitialized = true;
+    }
+
+    public static void cancelAllReminders(){
+        Log.i("TAG", "onStartJob cancel");
+        firebaseJobDispatcher.cancel(FIREBASE_REMINDER_TAG);
     }
 }

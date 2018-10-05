@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="pref_enable_notif">true</bool>
+    <bool name="pref_enable_on_wifi">true</bool>
+    <bool name="pref_enable_when_charg">true</bool>
 </resources>

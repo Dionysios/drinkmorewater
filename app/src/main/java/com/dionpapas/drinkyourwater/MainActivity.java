@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,15 +19,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupSharedPreferences();
-        FireBaseJob.initiaze(this);
+        //FireBaseJob.initiaze(this);
     }
 
         private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-          sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
-                getResources().getBoolean(R.bool.pref_enable_notif));
-//        FireBaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
-//                getResources().getBoolean(R.bool.pref_enable_notif)));
+        FireBaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
+                getResources().getBoolean(R.bool.pref_enable_notif)));
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -50,13 +49,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(Utilities.KEY_WATER_COUNT.equals(key)){
-           // updateWaterCount();
-        } else if(key.equals(sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
-                getResources().getBoolean(R.bool.pref_enable_notif)))){
-//            FireBaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
-//                    getResources().getBoolean(R.bool.pref_enable_notif)));
- //           FireBaseJob.initiaze(this);
+        Log.i("TAG", "onStartJob something changed" + key);
+        if(Utilities.KEY_WATER_COUNT.equals(key)) {
+            // updateWaterCount();
+        } else if(key.equals(getString(R.string.enable_notif_key))){
+            boolean active = sharedPreferences.getBoolean(
+                    getString(R.string.enable_notif_key),getResources().getBoolean(R.bool.pref_enable_notif));
+            if(active){
+                Log.i("TAG", "onStartJob starting notifications" + active);
+                FireBaseJob.initiaze(this, active);
+            }else {
+                Log.i("TAG", "onStartJob canceling notifications" + active);
+                FireBaseJob.cancelAllReminders();
+            }
         }
     }
 
