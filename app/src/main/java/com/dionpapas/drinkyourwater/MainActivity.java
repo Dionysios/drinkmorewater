@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupSharedPreferences();
-        //FireBaseJob.initiaze(this);
     }
 
         private void setupSharedPreferences() {
@@ -30,11 +29,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             boolean isCharging = sharedPreferences.getBoolean(
                     getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
             if(isCharging){
-                Log.i("TAG", "onStartJob adding contrain");
-                FireBaseJob.addContrain(Constraint.DEVICE_CHARGING);
+                Log.i("TAG", "onStartJob adding on initiliaze contrain");
             } else {
+                FireBaseJob.addConstrain(Constraint.DEVICE_CHARGING);
                 Log.i("TAG", "onStartJob removing contrain");
-                FireBaseJob.removeContrain(Constraint.DEVICE_CHARGING);
+                FireBaseJob.removeConstrain(Constraint.DEVICE_CHARGING);
             }
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -77,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
             if(isCharging){
                 Log.i("TAG", "onStartJob adding contrain");
-                FireBaseJob.addContrain(Constraint.DEVICE_CHARGING);
+                FireBaseJob.addConstrain(Constraint.DEVICE_CHARGING);
             } else {
                 Log.i("TAG", "onStartJob removing contrain");
-                FireBaseJob.removeContrain(Constraint.DEVICE_CHARGING);
+                FireBaseJob.removeConstrain(Constraint.DEVICE_CHARGING);
             }
         }
     }
