@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
+        android:width="200dp"
         android:defaultValue="@bool/pref_enable_notif"
         android:key="@string/enable_notif_key"
         android:summaryOff="@string/disable_notif"
@@ -8,7 +9,8 @@
         android:title="@string/enable_notif_title" />
 
     <CheckBoxPreference
-        android:defaultValue="@bool/pref_enable_on_wifi"
+        android:defaultValue="@bool/pref_on_wifi"
+        android:padding="0dp"
         android:key="@string/notif_on_wifi_key"
         android:summaryOff="@string/disable_notif"
         android:summaryOn="@string/enable"
@@ -16,9 +18,10 @@
 
     <CheckBoxPreference
         android:layout_width="match_parent"
-        android:defaultValue="@bool/pref_enable_when_charg"
+        android:padding="0dp"
+        android:defaultValue="@bool/pref_when_charg"
         android:key="@string/notif_when_charging_key"
         android:summaryOff="@string/disable_notif"
         android:summaryOn="@string/enable"
-        android:title="@string/notif_on_wifi_title" />
+        android:title="@string/notif_when_charging_title" />
 </PreferenceScreen>

@@ -1,5 +1,6 @@
 package com.dionpapas.drinkyourwater;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -22,19 +23,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
     }
 
-        private void setupSharedPreferences() {
+    private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        FireBaseJob.initiaze(this, sharedPreferences.getBoolean(getString(R.string.enable_notif_key),
-                getResources().getBoolean(R.bool.pref_enable_notif)));
-            boolean isCharging = sharedPreferences.getBoolean(
-                    getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
-            if(isCharging){
-                Log.i("TAG", "onStartJob adding on initiliaze contrain");
-            } else {
-                FireBaseJob.addConstrain(Constraint.DEVICE_CHARGING);
-                Log.i("TAG", "onStartJob removing contrain");
-                FireBaseJob.removeConstrain(Constraint.DEVICE_CHARGING);
-            }
+        initializeFirebaseJob(sharedPreferences);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -43,6 +34,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         MenuInflater inflater =  getMenuInflater();
         inflater.inflate(R.menu.settings_menu ,menu);
         return true;
+    }
+
+    private void initializeFirebaseJob(SharedPreferences sharedPreferences){
+        FireBaseJob.initiaze(this,
+                sharedPreferences.getBoolean(getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif)),
+                sharedPreferences.getBoolean(getString(R.string.notif_on_wifi_key), getResources().getBoolean(R.bool.pref_on_wifi)),
+                sharedPreferences.getBoolean(getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_when_charg)));
     }
 
     @Override
@@ -62,25 +60,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if(Utilities.KEY_WATER_COUNT.equals(key)) {
             // updateWaterCount();
         } else if(key.equals(getString(R.string.enable_notif_key))) {
-            boolean active = sharedPreferences.getBoolean(
-                    getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif));
-            if (active) {
-                Log.i("TAG", "onStartJob starting notifications" + active);
-                FireBaseJob.initiaze(this, active);
-            } else {
-                Log.i("TAG", "onStartJob canceling notifications" + active);
-                FireBaseJob.cancelAllReminders();
-            }
+            initializeFirebaseJob(sharedPreferences);
         } else if(key.equals(getString(R.string.notif_when_charging_key))){
-            boolean isCharging = sharedPreferences.getBoolean(
-                    getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_enable_when_charg));
-            if(isCharging){
-                Log.i("TAG", "onStartJob adding contrain");
-                FireBaseJob.addConstrain(Constraint.DEVICE_CHARGING);
-            } else {
-                Log.i("TAG", "onStartJob removing contrain");
-                FireBaseJob.removeConstrain(Constraint.DEVICE_CHARGING);
-            }
+            initializeFirebaseJob(sharedPreferences);
+        } else if(key.equals(getString(R.string.notif_on_wifi_key))){
+            initializeFirebaseJob(sharedPreferences);
         }
     }
 
