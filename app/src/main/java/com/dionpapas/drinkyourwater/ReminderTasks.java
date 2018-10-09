@@ -3,6 +3,8 @@ package com.dionpapas.drinkyourwater;
 import android.content.Context;
 import android.util.Log;
 
+import com.dionpapas.drinkyourwater.utilities.Utilities;
+
 public class ReminderTasks {
     public static final String ACTION_INCREMENT_WATER_COUNT = "increment-water-count";
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
@@ -22,8 +24,8 @@ public class ReminderTasks {
     }
 
     private static void incrementWaterCount(Context context) {
-       // Utilities.incrementWaterCount(context);
-        NotificationBuilder.clearNotification(context);
+       Utilities.incrementWaterCount(context);
+       NotificationBuilder.clearNotification(context);
     }
 
     synchronized public static void sendNotification(Context context) {

@@ -26,6 +26,11 @@
                 android:name="android.support.PARENT_ACTIVTY"
                 android:value=".MainActivity"/>
         </activity>
+
+        <!--This is required for immediate syncs -->
+        <service
+            android:name="com.dionpapas.drinkyourwater.ReminderIntent"
+            android:exported="false"/>
         <service
             android:exported="false"
             android:name="com.dionpapas.drinkyourwater.ReminderService">

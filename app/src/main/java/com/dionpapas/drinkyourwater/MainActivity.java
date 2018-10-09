@@ -10,16 +10,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 import com.firebase.jobdispatcher.Constraint;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+    private TextView mWaterCountDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mWaterCountDisplay = findViewById(R.id.tv_water_count);
+        updateWaterCount();
         setupSharedPreferences();
     }
 
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.i("TAG", "onStartJob something changed" + key);
         if(Utilities.KEY_WATER_COUNT.equals(key)) {
-            // updateWaterCount();
+            updateWaterCount();
         } else if(key.equals(getString(R.string.enable_notif_key))) {
             initializeFirebaseJob(sharedPreferences);
         } else if(key.equals(getString(R.string.notif_when_charging_key))){
@@ -74,5 +78,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
 
+    }
+
+    private void updateWaterCount() {
+        int waterCount = Utilities.getWaterCount(this);
+        mWaterCountDisplay.setText(waterCount+"");
     }
 }
