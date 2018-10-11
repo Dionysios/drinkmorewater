@@ -24,4 +24,12 @@
         android:summaryOff="@string/disable_notif"
         android:summaryOn="@string/enable"
         android:title="@string/notif_when_charging_title" />
+
+    <ListPreference
+        android:dialogTitle="Select time interval"
+        android:entries="@array/settings_list_preference_titles"
+        android:entryValues="@array/settings_list_preference_values"
+        android:key="@string/interval_key"
+        android:summary="Click to select time interval"
+        android:title="Interval Preference"/>
 </PreferenceScreen>

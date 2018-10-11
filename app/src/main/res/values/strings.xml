@@ -16,4 +16,5 @@
     <string name="water_text_toast">Drinking...Drinking....</string>
     <string name="charging_reminder_notification_title">Where\'s that water?</string>
     <string name="charging_reminder_notification_body">There\'s never a better time to drink water than now. Drink up!</string>
+    <string name="interval_key" translatable="false">interval_key</string>
 </resources>

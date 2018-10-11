@@ -15,15 +15,18 @@ import com.firebase.jobdispatcher.Trigger;
 import java.util.concurrent.TimeUnit;
 
 class FireBaseJob {
-    private static final int REMINDER_INTERVAL_MINUTES = 15;
-    private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+   // private static final int REMINDER_INTERVAL_MINUTES = 1;
+    //private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+    private static final int SYNC_FLEXTIME_SECONDS = 90 ;
     public static final String FIREBASE_REMINDER_TAG = "my-unique-tag";
 
-    synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging) {
+    synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging, String REMINDER_INTERVAL) {
+        Log.i("TAG", "onStartJob the time incoming" + REMINDER_INTERVAL );
+        int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(Integer.parseInt(REMINDER_INTERVAL)));
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
         if (!active) {
-            firebaseJobDispatcher.cancel(FIREBASE_REMINDER_TAG);
+            cancelAllReminders(context);
         } else {
             Log.i("TAG", "onStartJob initialize with" + active);
             Log.i("TAG", "onStartJob getting values here" + connectedWifi + "I am charging" + isCharging);
@@ -41,4 +44,10 @@ class FireBaseJob {
         }
     }
 
+    public static void cancelAllReminders(Context context){
+        Log.i("TAG", "onStartJob cancel");
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
+        firebaseJobDispatcher.cancel(FIREBASE_REMINDER_TAG);
+    }
 }

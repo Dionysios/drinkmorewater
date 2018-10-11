@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         FireBaseJob.initiaze(this,
                 sharedPreferences.getBoolean(getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif)),
                 sharedPreferences.getBoolean(getString(R.string.notif_on_wifi_key), getResources().getBoolean(R.bool.pref_on_wifi)),
-                sharedPreferences.getBoolean(getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_when_charg)));
+                sharedPreferences.getBoolean(getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_when_charg)),
+                sharedPreferences.getString(getString(R.string.interval_key), "1"));
     }
 
     @Override
@@ -63,11 +64,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Log.i("TAG", "onStartJob something changed" + key);
         if(Utilities.KEY_WATER_COUNT.equals(key)) {
             updateWaterCount();
-        } else if(key.equals(getString(R.string.enable_notif_key))) {
-            initializeFirebaseJob(sharedPreferences);
-        } else if(key.equals(getString(R.string.notif_when_charging_key))){
-            initializeFirebaseJob(sharedPreferences);
-        } else if(key.equals(getString(R.string.notif_on_wifi_key))){
+        } else {
+            FireBaseJob.cancelAllReminders(this);
             initializeFirebaseJob(sharedPreferences);
         }
     }
