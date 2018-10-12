@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 class FireBaseJob {
    // private static final int REMINDER_INTERVAL_MINUTES = 1;
     //private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
-    private static final int SYNC_FLEXTIME_SECONDS = 90 ;
+    private static final int SYNC_FLEXTIME_SECONDS = 150 ;
     public static final String FIREBASE_REMINDER_TAG = "my-unique-tag";
 
     synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging, String REMINDER_INTERVAL) {
@@ -37,7 +37,7 @@ class FireBaseJob {
                             isCharging ? Constraint.DEVICE_CHARGING : 0)
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
-                    .setTrigger(Trigger.executionWindow(SYNC_FLEXTIME_SECONDS, REMINDER_INTERVAL_SECONDS))
+                    .setTrigger(Trigger.executionWindow(REMINDER_INTERVAL_SECONDS,REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
                     .setReplaceCurrent(true)
                     .build();
             firebaseJobDispatcher.schedule(constraintReminderJob);
