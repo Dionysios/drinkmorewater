@@ -26,10 +26,10 @@
         android:title="@string/notif_when_charging_title" />
 
     <ListPreference
-        android:dialogTitle="Select time interval"
+        android:defaultValue="@string/interval_value"
+        android:summary="%s"
         android:entries="@array/settings_list_preference_titles"
         android:entryValues="@array/settings_list_preference_values"
         android:key="@string/interval_key"
-        android:summary="Click to select time interval"
-        android:title="Interval Preference"/>
+        android:title="@string/list_preference_title"/>
 </PreferenceScreen>

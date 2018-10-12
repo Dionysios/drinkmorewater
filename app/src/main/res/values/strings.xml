@@ -17,4 +17,6 @@
     <string name="charging_reminder_notification_title">Where\'s that water?</string>
     <string name="charging_reminder_notification_body">There\'s never a better time to drink water than now. Drink up!</string>
     <string name="interval_key" translatable="false">interval_key</string>
+    <string name="list_preference_title">Notification frequency in min</string>
+    <string name="interval_value" translatable="false">20</string>
 </resources>

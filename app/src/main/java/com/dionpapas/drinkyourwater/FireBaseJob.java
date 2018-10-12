@@ -21,8 +21,8 @@ class FireBaseJob {
     public static final String FIREBASE_REMINDER_TAG = "my-unique-tag";
 
     synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging, String REMINDER_INTERVAL) {
-        Log.i("TAG", "onStartJob the time incoming" + REMINDER_INTERVAL );
         int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(Integer.parseInt(REMINDER_INTERVAL)));
+        Log.i("TAG", "onStartJob the time incoming" + REMINDER_INTERVAL_SECONDS );
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
         if (!active) {
@@ -37,7 +37,7 @@ class FireBaseJob {
                             isCharging ? Constraint.DEVICE_CHARGING : 0)
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
-                    .setTrigger(Trigger.executionWindow(0, REMINDER_INTERVAL_SECONDS))
+                    .setTrigger(Trigger.executionWindow(SYNC_FLEXTIME_SECONDS, REMINDER_INTERVAL_SECONDS))
                     .setReplaceCurrent(true)
                     .build();
             firebaseJobDispatcher.schedule(constraintReminderJob);

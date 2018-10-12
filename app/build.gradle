@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.dionpapas.jobdispatcherexample"
-        minSdkVersion 26
+        applicationId "com.dionpapas.water_monster"
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"

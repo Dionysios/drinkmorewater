@@ -3,6 +3,8 @@ package com.dionpapas.drinkyourwater;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import com.firebase.jobdispatcher.Constraint;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private TextView mWaterCountDisplay;
+    ListPreference pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //myFrequencyList = (Preference) findPreference("frequency_key");
         initializeFirebaseJob(sharedPreferences);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -45,7 +49,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 sharedPreferences.getBoolean(getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif)),
                 sharedPreferences.getBoolean(getString(R.string.notif_on_wifi_key), getResources().getBoolean(R.bool.pref_on_wifi)),
                 sharedPreferences.getBoolean(getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_when_charg)),
-                sharedPreferences.getString(getString(R.string.interval_key), "1"));
+                sharedPreferences.getString(getString(R.string.interval_key), getString(R.string.interval_value)));
+       // pref.findIndexOfValue(getString(R.string.interval_key));
+//        ListPreference themePref = (ListPreference) sharedPreference;
+//        pref.setSummary(R.string.interval_value);
     }
 
     @Override
