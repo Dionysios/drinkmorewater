@@ -19,4 +19,6 @@
     <string name="interval_key" translatable="false">interval_key</string>
     <string name="list_preference_title">Notification frequency in min</string>
     <string name="interval_value" translatable="false">20</string>
+    <string name="no_internet_message">You have no internet connection</string>
+
 </resources>
