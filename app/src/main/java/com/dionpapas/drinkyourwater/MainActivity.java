@@ -5,51 +5,58 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.utilities.NetworkReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
+import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
+import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.IS_NETWORK_AVAILABLE;
+
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
-    private TextView mWaterCountDisplay;
-    boolean isConnected = false;
-    private boolean isConnectionAvailable;
-    public static final String NETWORK_SWITCH_FILTER = "com.devglan.broadcastreceiver.NETWORK_SWITCH_FILTER";
+    private TextView mWaterCountDisplay, mNetworkDisplay;
+    private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
+    private NetworkReceiver networkStateChangeReceiver;
+    String networkStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mWaterCountDisplay = findViewById(R.id.tv_water_count);
-        isOnline();
+        mNetworkDisplay = findViewById(R.id.tv_networkView);
         updateWaterCount();
         setupSharedPreferences();
-
-        Intent intnt = new Intent(NETWORK_SWITCH_FILTER);
-        intnt.putExtra("is_connected",true);
-        this.sendBroadcast(intnt);
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        networkStateChangeReceiver = new NetworkReceiver();
+        registerReceiver(networkStateChangeReceiver, new IntentFilter(CONNECTIVITY_ACTION));
+        registerReceiver(networkStateChangeReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
+        IntentFilter intentFilter = new IntentFilter(NetworkReceiver.NETWORK_AVAILABLE_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
+                networkStatus = isNetworkAvailable ? "connected" : "disconnected";
+                if (networkStatus.equals("disconnected")){
+                   mNetworkDisplay.setVisibility(View.VISIBLE);
+                } else {
+                   mNetworkDisplay.setVisibility(View.INVISIBLE);
+                }
+            }
+        }, intentFilter);
     }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        initializeFirebaseJob(sharedPreferences);
+        initializeFireBaseJob(sharedPreferences);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -60,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return true;
     }
 
-    private void initializeFirebaseJob(SharedPreferences sharedPreferences){
+    private void initializeFireBaseJob(SharedPreferences sharedPreferences){
         FireBaseJob.initiaze(this,
                 sharedPreferences.getBoolean(getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif)),
                 sharedPreferences.getBoolean(getString(R.string.notif_on_wifi_key), getResources().getBoolean(R.bool.pref_on_wifi)),
@@ -86,19 +93,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             updateWaterCount();
         } else {
             FireBaseJob.cancelAllReminders(this);
-            initializeFirebaseJob(sharedPreferences);
+            initializeFireBaseJob(sharedPreferences);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            registerReceiver(netSwitchReceiver, new IntentFilter(NETWORK_SWITCH_FILTER));
-        }
-        catch (Exception e){
-
-        }
     }
 
     @Override
@@ -106,26 +107,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-        unregisterReceiver(netSwitchReceiver);
-
+        unregisterReceiver(networkStateChangeReceiver);
     }
 
     private void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);
         mWaterCountDisplay.setText(waterCount+"");
     }
-
-    BroadcastReceiver netSwitchReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            isConnectionAvailable =  intent.getExtras().getBoolean("is_connected");
-            if (!isConnectionAvailable) {
-                Log.d("Network", "onReceive: " + isConnectionAvailable);
-            } else {
-                Log.d("Network", "onReceive: " + isConnectionAvailable);
-            }
-        }
-    };
-
-
 }

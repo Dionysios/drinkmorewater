@@ -5,23 +5,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NetworkReceiver extends BroadcastReceiver {
-    private static final String TAG = "NetworkReceiverTAG";
+    public static final String NETWORK_AVAILABLE_ACTION = "com.dionpapas.drinkyourwater.NetworkAvailable";
+    public static final String IS_NETWORK_AVAILABLE = "isNetworkAvailable";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ConnectivityManager conn =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = conn.getActiveNetworkInfo();
-        Log.d(TAG, "onReceive: " + networkInfo);
-//     if (ANY.equals(sPref) && networkInfo != null) {
-//            refreshDisplay = true;
-//        } else {
-//            refreshDisplay = false;
-//            // todo show not connected message
-//            //Toast.makeText(context, R.string.lost_connection, Toast.LENGTH_SHORT).show();
-//        }
+        Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
+        networkStateIntent.putExtra(IS_NETWORK_AVAILABLE,  isConnectedToInternet(context));
+        LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
+    }
+
+    private boolean isConnectedToInternet(Context context) {
+        try {
+            if (context != null) {
+                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                return networkInfo != null && networkInfo.isConnected();
+            }
+            return false;
+        } catch (Exception e) {
+            Log.e(NetworkReceiver.class.getName(), e.getMessage());
+            return false;
+        }
     }
 }
