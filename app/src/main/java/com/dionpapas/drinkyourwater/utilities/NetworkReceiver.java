@@ -13,12 +13,19 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 public class NetworkReceiver extends BroadcastReceiver {
     public static final String NETWORK_AVAILABLE_ACTION = "com.dionpapas.drinkyourwater.NetworkAvailable";
     public static final String IS_NETWORK_AVAILABLE = "isNetworkAvailable";
+    public static final String DATE_HAS_CHANGED = "dateHasChanged";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
-        networkStateIntent.putExtra(IS_NETWORK_AVAILABLE,  isConnectedToInternet(context));
-        LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
+        Log.i("TAG", "Getting intent 3" + intent.getAction());
+        if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
+            Intent dateIntent = new Intent(DATE_HAS_CHANGED);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
+        } else {
+            Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
+            networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
+        }
     }
 
     private boolean isConnectedToInternet(Context context) {

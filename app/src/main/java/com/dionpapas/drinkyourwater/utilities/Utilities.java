@@ -10,7 +10,7 @@ public class Utilities {
     private static final int DEFAULT_COUNT = 0;
     public static final String KEY_CHARGING_REMINDER_COUNT = "charging-reminder-count";
 
-    synchronized private static void setWaterCount(Context context, int glassesOfWater) {
+    synchronized public static void setWaterCount(Context context, int glassesOfWater) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(KEY_WATER_COUNT, glassesOfWater);

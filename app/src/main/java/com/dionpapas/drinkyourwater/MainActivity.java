@@ -20,6 +20,7 @@ import com.dionpapas.drinkyourwater.utilities.NetworkReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
+import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.DATE_HAS_CHANGED;
 import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.IS_NETWORK_AVAILABLE;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
@@ -37,18 +38,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         updateWaterCount();
         setupSharedPreferences();
         networkStateChangeReceiver = new NetworkReceiver();
+        //register Intents
         registerReceiver(networkStateChangeReceiver, new IntentFilter(CONNECTIVITY_ACTION));
         registerReceiver(networkStateChangeReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
+        registerReceiver(networkStateChangeReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
         IntentFilter intentFilter = new IntentFilter(NetworkReceiver.NETWORK_AVAILABLE_ACTION);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
-                networkStatus = isNetworkAvailable ? "connected" : "disconnected";
-                if (networkStatus.equals("disconnected")){
-                   mNetworkDisplay.setVisibility(View.VISIBLE);
+                Log.i("TAG", "Getting intent " + intent.getAction());
+                if (intent.getAction() == DATE_HAS_CHANGED ) {
+                    Log.i("TAG", "Getting intent 1 " + intent.getAction());
+                    Utilities.setWaterCount(context, 0);
                 } else {
-                   mNetworkDisplay.setVisibility(View.INVISIBLE);
+                    boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
+                    networkStatus = isNetworkAvailable ? "connected" : "disconnected";
+                    if (networkStatus.equals("disconnected")){
+                        mNetworkDisplay.setVisibility(View.VISIBLE);
+                    } else {
+                        mNetworkDisplay.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         }, intentFilter);
