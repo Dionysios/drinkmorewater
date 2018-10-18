@@ -16,8 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dionpapas.drinkyourwater.database.AppDatabase;
+import com.dionpapas.drinkyourwater.database.WaterEntry;
 import com.dionpapas.drinkyourwater.utilities.NetworkReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.DATE_HAS_CHANGED;
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
     private NetworkReceiver networkStateChangeReceiver;
     String networkStatus;
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mNetworkDisplay = findViewById(R.id.tv_networkView);
         updateWaterCount();
         setupSharedPreferences();
+
+        mDb = AppDatabase.getInstance(getApplicationContext());
         networkStateChangeReceiver = new NetworkReceiver();
+
         //register Intents
         registerReceiver(networkStateChangeReceiver, new IntentFilter(CONNECTIVITY_ACTION));
         registerReceiver(networkStateChangeReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
@@ -50,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Log.i("TAG", "Getting intent " + intent.getAction());
                 if (intent.getAction() == DATE_HAS_CHANGED ) {
                     Log.i("TAG", "Getting intent 1 " + intent.getAction());
+                    saveWaterEntry()
                     Utilities.setWaterCount(context, 0);
                 } else {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
@@ -123,5 +134,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);
         mWaterCountDisplay.setText(waterCount+"");
+    }
+
+    public void saveWaterEntry(int counter) {
+        Date date = new Date();
+        // COMPLETED (8) Create taskEntry variable using the variables defined above
+        WaterEntry waterEntry = new WaterEntry(counter, date);
+        // COMPLETED (9) Use the taskDao in the AppDatabase variable to insert the taskEntry
+        mDb.taskDao().insertWaterEntry(waterEntry);
+        // COMPLETED (10) call finish() to come back to MainActivity
+        finish();
     }
 }
