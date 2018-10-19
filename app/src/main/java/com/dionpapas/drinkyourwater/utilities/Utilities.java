@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.dionpapas.drinkyourwater.database.AppDatabase;
+import com.dionpapas.drinkyourwater.database.WaterEntry;
+
+import java.util.Date;
+
 public class Utilities {
 
     public static final String KEY_WATER_COUNT = "water-count";
     private static final int DEFAULT_COUNT = 0;
     public static final String KEY_CHARGING_REMINDER_COUNT = "charging-reminder-count";
+    private static AppDatabase mDb;
 
     synchronized public static void setWaterCount(Context context, int glassesOfWater) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -31,9 +37,22 @@ public class Utilities {
     synchronized public static void incrementChargingReminderCount(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int chargingReminders = prefs.getInt(KEY_CHARGING_REMINDER_COUNT, DEFAULT_COUNT);
-
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(KEY_CHARGING_REMINDER_COUNT, ++chargingReminders);
         editor.apply();
+    }
+
+    public static void saveWaterEntry(Context context) {
+        mDb = AppDatabase.getInstance(context);
+        int counter = getWaterCount(context);
+        Date date = new Date();
+        final WaterEntry waterEntry = new WaterEntry(counter, date);
+        //mDb.taskDao().insertWaterEntry(waterEntry);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.taskDao().insertWaterEntry(waterEntry);
+            }
+        });
     }
 }

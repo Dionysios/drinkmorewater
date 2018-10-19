@@ -1,5 +1,7 @@
 package com.dionpapas.drinkyourwater;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,6 +27,7 @@ import com.dionpapas.drinkyourwater.utilities.Utilities;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.DATE_HAS_CHANGED;
@@ -60,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Log.i("TAG", "Getting intent " + intent.getAction());
                 if (intent.getAction() == DATE_HAS_CHANGED ) {
                     Log.i("TAG", "Getting intent 1 " + intent.getAction());
-                    saveWaterEntry()
                     Utilities.setWaterCount(context, 0);
                 } else {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
@@ -121,6 +124,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+        final LiveData<List<WaterEntry>> counting = mDb.taskDao().getAllWaterEntries();
+        counting.observe(this, new Observer<List<WaterEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<WaterEntry> waterEntries) {
+                Log.i("ADD", "on Resume this is the size" + waterEntries.size());
+                if(waterEntries.size() > 0) Log.i("ADD", "on Resume this is the size" + waterEntries.get(0).getCounter() + "and" + waterEntries.get(0).getUpdatedAt());
+            }
+        });
     }
 
     @Override
@@ -136,13 +147,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mWaterCountDisplay.setText(waterCount+"");
     }
 
-    public void saveWaterEntry(int counter) {
-        Date date = new Date();
-        // COMPLETED (8) Create taskEntry variable using the variables defined above
-        WaterEntry waterEntry = new WaterEntry(counter, date);
-        // COMPLETED (9) Use the taskDao in the AppDatabase variable to insert the taskEntry
-        mDb.taskDao().insertWaterEntry(waterEntry);
-        // COMPLETED (10) call finish() to come back to MainActivity
-        finish();
+    public void testSaving(View view) {
+        Utilities.saveWaterEntry(this);
     }
+
 }

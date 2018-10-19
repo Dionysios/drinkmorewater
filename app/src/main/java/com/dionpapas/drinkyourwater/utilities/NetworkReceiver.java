@@ -32,6 +32,9 @@ public class NetworkReceiver extends BroadcastReceiver {
         try {
             if (context != null) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+//                ConnectivityManager.NetworkCallback networkCallback = createNetworkCallback(subscriber, context);
+//                final NetworkRequest networkRequest = new NetworkRequest.Builder().build();
+//                connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 return networkInfo != null && networkInfo.isConnected();
             }

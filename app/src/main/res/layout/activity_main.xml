@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/water_increment_content_desc"
-
+            android:onClick="testSaving"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_water_glass" />

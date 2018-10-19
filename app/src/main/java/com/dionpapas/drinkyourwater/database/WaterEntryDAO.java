@@ -1,5 +1,6 @@
 package com.dionpapas.drinkyourwater.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Dao
 public interface WaterEntryDAO {
-    @Query("SELECT * FROM DailyWaterEntries")
-    List<WaterEntry> getAllWaterEntries();
+    @Query("SELECT * FROM DailyWaterEntries ORDER BY updated_at")
+    LiveData<List<WaterEntry>> getAllWaterEntries();
 
     @Insert
     void insertWaterEntry(WaterEntry waterEntry);
