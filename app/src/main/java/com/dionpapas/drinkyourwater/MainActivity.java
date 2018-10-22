@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     String networkStatus;
     private AppDatabase mDb;
 
+    private BroadcastReceiver dateReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
             }
         }, intentFilter);
+
+        dateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // TODO: Awesome things
+                Log.i("TAG", "I got something here " + intent.getAction());
+                Utilities.setWaterCount(context, 0);
+            }
+        };
+
+        IntentFilter intentFilter2  = new IntentFilter();
+        //intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        //intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+
+        this.registerReceiver(
+                dateReceiver,
+                new IntentFilter(Intent.ACTION_TIME_CHANGED)
+        );
     }
 
     private void setupSharedPreferences() {
@@ -140,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
         unregisterReceiver(networkStateChangeReceiver);
+        unregisterReceiver(dateReceiver);
     }
 
     private void updateWaterCount() {
