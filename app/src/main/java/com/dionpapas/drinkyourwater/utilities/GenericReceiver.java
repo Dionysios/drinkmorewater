@@ -10,21 +10,23 @@ import android.util.Log;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-public class NetworkReceiver extends BroadcastReceiver {
+public class GenericReceiver extends BroadcastReceiver {
     public static final String NETWORK_AVAILABLE_ACTION = "com.dionpapas.drinkyourwater.NetworkAvailable";
     public static final String IS_NETWORK_AVAILABLE = "isNetworkAvailable";
-    public static final String DATE_HAS_CHANGED = "dateHasChanged";
+    public static final String DATE_HAS_CHANGED = "com.dionpapas.drinkyourwater.dateHasChanged";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("TAG", "Getting intent 3" + intent.getAction());
-        if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
-            Intent dateIntent = new Intent(DATE_HAS_CHANGED);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
-        } else {
+        if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
+        } else if (intent.getAction().equals("android.intent.action.TIME_SET")) {
+            Intent dateIntent = new Intent(DATE_HAS_CHANGED);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
+        } else {
+            Log.i("TAG", "Action can not be handle" + intent.getAction());
         }
     }
 
@@ -40,7 +42,7 @@ public class NetworkReceiver extends BroadcastReceiver {
             }
             return false;
         } catch (Exception e) {
-            Log.e(NetworkReceiver.class.getName(), e.getMessage());
+            Log.e(GenericReceiver.class.getName(), e.getMessage());
             return false;
         }
     }

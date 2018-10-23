@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,22 +22,20 @@ import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
-import com.dionpapas.drinkyourwater.utilities.NetworkReceiver;
+import com.dionpapas.drinkyourwater.utilities.GenericReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
-import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.DATE_HAS_CHANGED;
-import static com.dionpapas.drinkyourwater.utilities.NetworkReceiver.IS_NETWORK_AVAILABLE;
+import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CHANGED;
+import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private TextView mWaterCountDisplay, mNetworkDisplay;
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
-    private NetworkReceiver networkStateChangeReceiver;
+    private GenericReceiver genericReceiver;
     String networkStatus;
     private AppDatabase mDb;
 
@@ -50,20 +49,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
 
         mDb = AppDatabase.getInstance(getApplicationContext());
-        networkStateChangeReceiver = new NetworkReceiver();
+        genericReceiver = new GenericReceiver();
 
         //register Intents
-        registerReceiver(networkStateChangeReceiver, new IntentFilter(CONNECTIVITY_ACTION));
-        registerReceiver(networkStateChangeReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
-        registerReceiver(networkStateChangeReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
-        IntentFilter intentFilter = new IntentFilter(NetworkReceiver.NETWORK_AVAILABLE_ACTION);
+        this.registerReceiver(genericReceiver, new IntentFilter(CONNECTIVITY_ACTION));
+        this.registerReceiver(genericReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
+        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_TIME_CHANGED));
+        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
+        //Register intents to local receiver
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GenericReceiver.DATE_HAS_CHANGED);
+        intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.i("TAG", "Getting intent " + intent.getAction());
-                if (intent.getAction() == DATE_HAS_CHANGED ) {
-                    Log.i("TAG", "Getting intent 1 " + intent.getAction());
+                if (intent.getAction().equals(DATE_HAS_CHANGED)) {
+                    Utilities.saveWaterEntry(context);
                     Utilities.setWaterCount(context, 0);
                 } else {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-        unregisterReceiver(networkStateChangeReceiver);
+        unregisterReceiver(genericReceiver);
     }
 
     private void updateWaterCount() {
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void testSaving(View view) {
-        Utilities.saveWaterEntry(this);
+        updateWaterCount();
     }
 
 }
