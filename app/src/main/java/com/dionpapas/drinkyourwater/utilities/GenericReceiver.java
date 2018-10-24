@@ -22,7 +22,8 @@ public class GenericReceiver extends BroadcastReceiver {
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
-        } else if (intent.getAction().equals("android.intent.action.TIME_SET")) {
+        } else if (intent.getAction().equals("android.intent.action.DATE_CHANGED")) {
+        //} else if (intent.getAction().equals("android.intent.action.TIME_SET")) {
             Intent dateIntent = new Intent(DATE_HAS_CHANGED);
             LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
         } else {
