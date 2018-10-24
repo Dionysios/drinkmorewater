@@ -51,11 +51,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mDb = AppDatabase.getInstance(getApplicationContext());
         genericReceiver = new GenericReceiver();
 
+        IntentFilter intentFilterDate = new IntentFilter();
+        intentFilterDate.addAction(Intent.ACTION_TIME_CHANGED);
+        intentFilterDate.addAction(Intent.ACTION_DATE_CHANGED);
+        intentFilterDate.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         //register Intents
         this.registerReceiver(genericReceiver, new IntentFilter(CONNECTIVITY_ACTION));
         this.registerReceiver(genericReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
-        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_TIME_CHANGED));
+//        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_TIME_CHANGED));
         this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
+//        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED));
+//        this.registerReceiver(genericReceiver, intentFilterDate);
         //Register intents to local receiver
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GenericReceiver.DATE_HAS_CHANGED);
