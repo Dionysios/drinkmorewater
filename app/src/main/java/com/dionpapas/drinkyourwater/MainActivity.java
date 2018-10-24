@@ -9,9 +9,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +29,7 @@ import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
+import com.dionpapas.drinkyourwater.fragments.MainFragment;
 import com.dionpapas.drinkyourwater.utilities.GenericReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
@@ -32,20 +40,35 @@ import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CHANGED;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
-    private TextView mWaterCountDisplay, mNetworkDisplay;
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener{
+    //private TextView mWaterCountDisplay, mNetworkDisplay;
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
     private GenericReceiver genericReceiver;
     String networkStatus;
     private AppDatabase mDb;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mWaterCountDisplay = findViewById(R.id.tv_water_count);
-        mNetworkDisplay = findViewById(R.id.tv_networkView);
-        updateWaterCount();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+//        mWaterCountDisplay = findViewById(R.id.tv_water_count);
+//        mNetworkDisplay = findViewById(R.id.tv_networkView);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //updateWaterCount();
         setupSharedPreferences();
 
         mDb = AppDatabase.getInstance(getApplicationContext());
@@ -77,13 +100,43 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")){
-                        mNetworkDisplay.setVisibility(View.VISIBLE);
+                       // mNetworkDisplay.setVisibility(View.VISIBLE);
                     } else {
-                        mNetworkDisplay.setVisibility(View.INVISIBLE);
+                      //  mNetworkDisplay.setVisibility(View.INVISIBLE);
                     }
                 }
             }
         }, intentFilter);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new MainFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_main);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_main:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new MainFragment()).commit();
+                break;
+            case R.id.nav_dairy:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new DialogFragment()).commit();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void setupSharedPreferences() {
@@ -152,11 +205,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);
-        mWaterCountDisplay.setText(waterCount+"");
+       // mWaterCountDisplay.setText(waterCount+"");
     }
-
-    public void testSaving(View view) {
-        updateWaterCount();
-    }
-
 }

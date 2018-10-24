@@ -1,79 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_main"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context="com.dionpapas.drinkyourwater.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context="com.dionpapas.drinkyourwater.MainActivity"
+    tools:openDrawer="start">
 
-    <TextView
-        android:id="@+id/tv_instructions"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/instructions_msg" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_water_increment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ImageButton
-            android:id="@+id/ib_water_increment"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/water_increment_content_desc"
-            android:onClick="testSaving"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_water_glass" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
 
-            <!-- Centering TextView within image -->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="64"
-                android:visibility="invisible" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_water_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/default_water_count"
-                android:textColor="#424242"
-                android:textSize="35sp" />
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="36"
-                android:visibility="invisible" />
-        </LinearLayout>
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/tv_networkView"
-        android:visibility="invisible"
-        android:background="#ff323232"
-        android:paddingBottom="18dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="18dp"
-        android:textColor="#ffffffff"
-        android:textSize="14sp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/no_internet_message"/>
-</LinearLayout>
-    <!--android:onClick="incrementWater"-->
+</android.support.v4.widget.DrawerLayout>
