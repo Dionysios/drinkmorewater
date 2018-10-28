@@ -5,32 +5,31 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main"
-            android:icon="@drawable/ic_settings_black"
-            android:title="Home" />
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_dairy"
-            android:icon="@drawable/ic_settings_black"
-            android:title="Dairy" />
+            android:icon="@drawable/ic_show_chart_black_24dp"
+            android:title="@string/progress" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_settings_black"
             android:title="@string/settings" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_settings_black"
-            android:title="@string/settings" />
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_black_24dp"
+            android:title="@string/share" />
+        <item
+            android:id="@+id/nav_rate"
+            android:icon="@drawable/ic_thumb_up_black_24dp"
+            android:title="@string/rate" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/about" />
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_settings_black"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_settings_black"
-                android:title="Send" />
-        </menu>
-    </item>
+
+
 </menu>

@@ -52,13 +52,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         drawer = findViewById(R.id.drawer_layout);
-//        mWaterCountDisplay = findViewById(R.id.tv_water_count);
-//        mNetworkDisplay = findViewById(R.id.tv_networkView);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -127,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         new DialogFragment()).commit();
                 break;
         }
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
