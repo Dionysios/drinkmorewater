@@ -12,7 +12,7 @@
             android:icon="@drawable/ic_show_chart_black_24dp"
             android:title="@string/progress" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black"
             android:title="@string/settings" />
         <item
@@ -21,7 +21,7 @@
             android:title="@string/share" />
         <item
             android:id="@+id/nav_rate"
-            android:icon="@drawable/ic_thumb_up_black_24dp"
+            android:icon="@drawable/ic_favorite_black_24dp"
             android:title="@string/rate" />
         <item
             android:id="@+id/nav_about"

@@ -3,6 +3,7 @@ package com.dionpapas.drinkyourwater.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
@@ -13,7 +14,6 @@ public class Utilities {
 
     public static final String KEY_WATER_COUNT = "water-count";
     private static final int DEFAULT_COUNT = 0;
-    public static final String KEY_CHARGING_REMINDER_COUNT = "charging-reminder-count";
     private static AppDatabase mDb;
 
     synchronized public static void setWaterCount(Context context, int glassesOfWater) {
@@ -31,15 +31,9 @@ public class Utilities {
 
     synchronized public static void incrementWaterCount(Context context) {
         int waterCount = Utilities.getWaterCount(context);
+        Log.i("ADD", "Here 1");
         Utilities.setWaterCount(context, ++waterCount);
-    }
-
-    synchronized public static void incrementChargingReminderCount(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int chargingReminders = prefs.getInt(KEY_CHARGING_REMINDER_COUNT, DEFAULT_COUNT);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(KEY_CHARGING_REMINDER_COUNT, ++chargingReminders);
-        editor.apply();
+        Log.i("ADD", "Here 2");
     }
 
     public static void saveWaterEntry(Context context) {

@@ -12,36 +12,32 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
+import com.dionpapas.drinkyourwater.fragments.DairyFragment;
 import com.dionpapas.drinkyourwater.fragments.MainFragment;
+import com.dionpapas.drinkyourwater.fragments.SettingsFragment;
 import com.dionpapas.drinkyourwater.utilities.GenericReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 import java.util.List;
-
 
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CHANGED;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener{
-    //private TextView mWaterCountDisplay, mNetworkDisplay;
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
     private GenericReceiver genericReceiver;
     String networkStatus;
@@ -96,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")){
+                        //todo setVIsibility it show be called from Fragment
                        // mNetworkDisplay.setVisibility(View.VISIBLE);
                     } else {
                       //  mNetworkDisplay.setVisibility(View.INVISIBLE);
@@ -120,7 +117,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
             case R.id.nav_dairy:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new DialogFragment()).commit();
+                        new DairyFragment()).commit();
+                break;
+            case R.id.nav_settings:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new SettingsFragment()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -142,12 +143,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater =  getMenuInflater();
-        inflater.inflate(R.menu.settings_menu ,menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater =  getMenuInflater();
+//        inflater.inflate(R.menu.settings_menu ,menu);
+//        return true;
+//    }
 
     private void initializeFireBaseJob(SharedPreferences sharedPreferences){
         FireBaseJob.initiaze(this,
@@ -157,16 +158,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 sharedPreferences.getString(getString(R.string.interval_key), getString(R.string.interval_value)));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.action_settings){
-            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
-            startActivity(startSettingsActivity);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if(id == R.id.action_settings){
+//            Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+//            startActivity(startSettingsActivity);
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

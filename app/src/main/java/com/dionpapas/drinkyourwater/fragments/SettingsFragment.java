@@ -1,8 +1,10 @@
-package com.dionpapas.drinkyourwater;
+package com.dionpapas.drinkyourwater.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
+import com.dionpapas.drinkyourwater.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
