@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
@@ -27,6 +29,7 @@ public class MainFragment extends Fragment implements SharedPreferences.OnShared
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
         mWaterCountDisplay = view.findViewById(R.id.tv_water_count);
         mNetworkDisplay = view.findViewById(R.id.tv_networkView);
         mImageView = view.findViewById(R.id.ib_water_increment);
@@ -44,7 +47,6 @@ public class MainFragment extends Fragment implements SharedPreferences.OnShared
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        //initializeFireBaseJob(sharedPreferences);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -69,5 +71,11 @@ public class MainFragment extends Fragment implements SharedPreferences.OnShared
         super.onDestroyView();
         PreferenceManager.getDefaultSharedPreferences(getContext())
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
     }
 }

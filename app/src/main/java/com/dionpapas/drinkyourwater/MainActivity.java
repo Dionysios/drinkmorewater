@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
-
+        setActionBarTitle(getString(R.string.app_name_2));
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.i("TAG", "onStartJob something changed" + key);
         if(Utilities.KEY_WATER_COUNT.equals(key)) {
-            updateWaterCount();
+            //updateWaterCount();
         } else {
             FireBaseJob.cancelAllReminders(this);
             initializeFireBaseJob(sharedPreferences);
@@ -201,8 +201,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         unregisterReceiver(genericReceiver);
     }
 
-    private void updateWaterCount() {
-        int waterCount = Utilities.getWaterCount(this);
-       // mWaterCountDisplay.setText(waterCount+"");
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

@@ -34,7 +34,7 @@ class NotificationBuilder {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,WATER_REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setSmallIcon(R.drawable.ic_water_glass)
+                .setSmallIcon(R.drawable.ic_local_drink_black)
                 .setLargeIcon(notificationIcon(context))
                 .setContentTitle(context.getString(R.string.charging_reminder_notification_title))
                 .setContentText(context.getString(R.string.charging_reminder_notification_body))
@@ -66,7 +66,7 @@ class NotificationBuilder {
 
     private static Bitmap notificationIcon(Context context) {
         Resources res = context.getResources();
-        Bitmap notificationIcon = BitmapFactory.decodeResource(res, R.drawable.ic_water_glass);
+        Bitmap notificationIcon = BitmapFactory.decodeResource(res, R.drawable.ic_local_drink_black);
         return notificationIcon;
     }
 
@@ -85,9 +85,8 @@ class NotificationBuilder {
                 ignoreDrinkWaterReminderIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action ignoreReminderAction =
-                new NotificationCompat.Action(R.drawable.ic_water_glass,"Not now",
+                new NotificationCompat.Action(R.drawable.ic_local_drink_black,"Not now",
                         ignoreDrinkWaterReminderPendingIntent);
-
         return ignoreReminderAction;
     }
 
@@ -100,9 +99,8 @@ class NotificationBuilder {
                 drinkWaterReminderIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action drinkingReminderAction =
-                new NotificationCompat.Action(R.drawable.ic_water_glass,"Yes!",
+                new NotificationCompat.Action(R.drawable.ic_local_drink_black,"Yes!",
                         drinkWaterReminderPendingIntent);
-
         return drinkingReminderAction;
     }
 

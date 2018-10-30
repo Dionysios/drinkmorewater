@@ -8,17 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
 import com.dionpapas.drinkyourwater.adapters.DiaryAdapter;
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
-
 import java.util.List;
-
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class DairyFragment extends Fragment {
@@ -36,6 +35,10 @@ public class DairyFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Set the RecyclerView to its corresponding view
+        // Set title bar
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.progress));
+        //Toolbar toolbar = view.findViewById(R.id.toolbar);
+        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         mRecyclerView = view.findViewById(R.id.recyclerViewWaterEntries);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // Initialize the adapter and attach it to the RecyclerView
@@ -54,5 +57,11 @@ public class DairyFragment extends Fragment {
                 mAdapter.setwaterEntries(waterEntries);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.progress));
     }
 }

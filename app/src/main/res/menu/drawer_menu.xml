@@ -27,9 +27,9 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/about" />
-
+        <item
+            android:id="@+id/nav_sync"
+            android:icon="@drawable/ic_sync_black"
+            android:title="@string/sync" />
     </group>
-
-
-
 </menu>
