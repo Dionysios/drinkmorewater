@@ -25,6 +25,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="home">Home</string>
+    <string name="cup">Select your cup size!</string>
     <string name="share">Tell the world!</string>
     <string name="rate">Rate the app!</string>
     <string name="about">About</string>

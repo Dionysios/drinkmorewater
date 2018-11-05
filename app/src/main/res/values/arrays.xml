@@ -3,6 +3,7 @@
     <string-array name="settings_list_preference_titles">
         <item>15 minutes</item>
         <item>20 minutes</item>
+        <item>25 minutes</item>
         <item>30 minutes</item>
         <item>45 minutes</item>
         <item>1 hour</item>
@@ -12,10 +13,27 @@
     <string-array name="settings_list_preference_values">
         <item>15</item>
         <item>20</item>
+        <item>25</item>
         <item>30</item>
         <item>45</item>
         <item>60</item>
         <item>90</item>
         <item>120</item>
+    </string-array>
+    <string-array name="settings_list_cup_titles">
+        <item>100 ml</item>
+        <item>200 ml</item>
+        <item>250 ml</item>
+        <item>300 ml</item>
+        <item>400 ml</item>
+        <item>500 ml</item>
+    </string-array>
+    <string-array name="settings_list_cup_values">
+        <item>100</item>
+        <item>200</item>
+        <item>250</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
     </string-array>
 </resources>

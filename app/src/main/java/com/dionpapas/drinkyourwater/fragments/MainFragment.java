@@ -1,10 +1,13 @@
 package com.dionpapas.drinkyourwater.fragments;
 
-import android.content.SharedPreferences;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +17,14 @@ import android.widget.TextView;
 
 import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
+import com.dionpapas.drinkyourwater.utilities.GenericReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
-public class MainFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CHANGED;
+import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
+import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.NETWORK_AVAILABLE_ACTION;
+
+public class MainFragment extends Fragment {
 
     private TextView mWaterCountDisplay, mNetworkDisplay;
     private ImageView mImageView;
@@ -34,20 +42,36 @@ public class MainFragment extends Fragment implements SharedPreferences.OnShared
         mNetworkDisplay = view.findViewById(R.id.tv_networkView);
         mImageView = view.findViewById(R.id.ib_water_increment);
         mNetworkDisplay.setVisibility(View.INVISIBLE);
-        setupSharedPreferences();
         updateWaterCount();
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("ADD", "Here 0");
                 Utilities.incrementWaterCount(getContext());
+                updateWaterCount();
             }
         });
-    }
+        //Local Broadcast Manager to receive events inside the app
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GenericReceiver.DATE_HAS_CHANGED);
+        intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
 
-    private void setupSharedPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                 if(intent.getAction().equals(NETWORK_AVAILABLE_ACTION)){
+                    boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
+                    String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
+                    if (networkStatus.equals("disconnected")){
+                        mNetworkDisplay.setVisibility(View.VISIBLE);
+                    } else {
+                        mNetworkDisplay.setVisibility(View.INVISIBLE);
+                    }
+                } else if (intent.getAction().equals(DATE_HAS_CHANGED)){
+                     updateWaterCount();
+                 }
+            }
+        }, intentFilter);
     }
 
     private void updateWaterCount() {
@@ -56,26 +80,14 @@ public class MainFragment extends Fragment implements SharedPreferences.OnShared
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.i("ADD", "Here 4" + key);
-        if(Utilities.KEY_WATER_COUNT.equals(key)) {
-            updateWaterCount();
-        } else {
-            //FireBaseJob.cancelAllReminders(this);
-            //initializeFireBaseJob(sharedPreferences);
-        }
-    }
-
-    @Override
     public void onDestroyView () {
         super.onDestroyView();
-        PreferenceManager.getDefaultSharedPreferences(getContext())
-                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        updateWaterCount();
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
     }
 }

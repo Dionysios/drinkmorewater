@@ -8,16 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
 import com.dionpapas.drinkyourwater.adapters.DiaryAdapter;
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
+
 import java.util.List;
+
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class DairyFragment extends Fragment {
