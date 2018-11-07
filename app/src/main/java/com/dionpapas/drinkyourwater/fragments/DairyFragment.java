@@ -39,8 +39,6 @@ public class DairyFragment extends Fragment {
         // Set the RecyclerView to its corresponding view
         // Set title bar
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.progress));
-        //Toolbar toolbar = view.findViewById(R.id.toolbar);
-        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         mRecyclerView = view.findViewById(R.id.recyclerViewWaterEntries);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // Initialize the adapter and attach it to the RecyclerView
