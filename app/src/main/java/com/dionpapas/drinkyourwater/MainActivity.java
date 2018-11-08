@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new MainFragment()).commit();
+                        mainFragment).commit();
                 break;
             case R.id.nav_dairy:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
