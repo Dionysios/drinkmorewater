@@ -8,6 +8,8 @@ import android.util.Log;
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utilities {
@@ -56,5 +58,11 @@ public class Utilities {
                 mDb.taskDao().insertWaterEntry(waterEntry);
             }
         });
+    }
+
+    public static String getTodaysDate(){
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
+        return currentDate;
     }
 }

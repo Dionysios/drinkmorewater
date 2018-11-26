@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
@@ -83,55 +84,4 @@ public class MainFragment extends Fragment {
         super.onDetach();
         listener = null;
     }
-    //        }, intentFilter);
-    //            }
-    //                 }
-    //                     updateWaterCount();
-    //                } else if (intent.getAction().equals(DATE_HAS_CHANGED)){
-    //                    }
-    //                        mNetworkDisplay.setVisibility(View.INVISIBLE);
-    //                    } else {
-    //                        mNetworkDisplay.setVisibility(View.VISIBLE);
-    //                    if (networkStatus.equals("disconnected")){
-    //                    String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
-    //                    boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
-    //                 if(intent.getAction().equals(NETWORK_AVAILABLE_ACTION)){
-    //            public void onReceive(Context context, Intent intent) {
-    //            @Override
-    //        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
-    //
-    //        intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
-    //        intentFilter.addAction(GenericReceiver.DATE_HAS_CHANGED);
-    //        IntentFilter intentFilter = new IntentFilter();
-    //        //Local Broadcast Manager to receive events inside the app
-    //        });
-    //            }
-    //                //updateWaterCount();
-    //                Utilities.incrementWaterCount(getContext());
-    //                Log.i("ADD", "Here 0");
-    //            public void onClick(View v) {
-    //            @Override
-    //        mImageView.setOnClickListener(new View.OnClickListener() {
-    //        //updateWaterCount();
-    //        mNetworkDisplay.setVisibility(View.INVISIBLE);
-    //        mImageView = view.findViewById(R.id.ib_water_increment);
-    //        mNetworkDisplay = view.findViewById(R.id.tv_networkView);
-    //        mWaterCountDisplay = view.findViewById(R.id.tv_water_count);
-    //        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
-    //    public void onViewCreated(View view, Bundle savedInstanceState) {
-//    @Override
-
-//    }
-//
-//    @Override
-//    public void onDestroyView () {
-//        super.onDestroyView();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        updateWaterCount();
-//        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
-//    }
 }

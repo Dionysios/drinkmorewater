@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.dionpapas.drinkyourwater.MainActivity;
+
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class GenericReceiver extends BroadcastReceiver {
@@ -18,6 +20,7 @@ public class GenericReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("TAG", "Getting intent 3" + intent.getAction());
+      //  MainActivity.writeFile("GeneralReceiver", intent);
         if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
