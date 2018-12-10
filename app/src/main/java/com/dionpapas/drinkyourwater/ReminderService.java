@@ -1,14 +1,20 @@
 package com.dionpapas.drinkyourwater;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.dionpapas.drinkyourwater.utilities.Utilities;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-public class ReminderService extends JobService {
+import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 
+public class ReminderService extends JobService {
+s
     /**
      * This asynctask will run a job once conditions are met with the constraints
      * As soon as user device gets connected with the power supply. it will generate
@@ -21,6 +27,9 @@ public class ReminderService extends JobService {
         mBackgroundTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
+
+
+
                 Context context = ReminderService.this;
                 ReminderTasks.executeTask(context, ReminderTasks.SEND_NOTIFICATION);
                 Log.i("TAG", "onStartJob");
@@ -48,4 +57,12 @@ public class ReminderService extends JobService {
         /* true means, we're not done, please reschedule */
         return true;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onCreate();
+
+    }
+
+
 }

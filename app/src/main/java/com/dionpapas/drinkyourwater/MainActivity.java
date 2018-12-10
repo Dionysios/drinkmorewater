@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -42,16 +43,14 @@ import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.NETWORK_AVA
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener, MainFragment.FragmentMainListener {
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
-    private static final String SharedPref = "SharedPref";
     private GenericReceiver genericReceiver;
     private AppDatabase mDb;
     private DrawerLayout drawer;
     private MainFragment mainFragment;
-    private String filename = "export.csv";
-    private static final String SHARED_FOLDER = "shared";
-    private boolean mFileExists;
-    private static String LOG_TAG = "MainActivty";
-    private static File sharedFile = null;
+    DateBroadcastReceiver mDateBroadcastReceiver;
+    IntentFilter mDateIntentFilter;
+
+    private static final String TAG = "GenericReceiverMain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,34 +71,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mainFragment = new MainFragment();
         setupSharedPreferences();
         mDb = AppDatabase.getInstance(getApplicationContext());
-        genericReceiver = new GenericReceiver();
+       // genericReceiver = new GenericReceiver();
+      //  mDateBroadcastReceiver = new DateBroadcastReceiver();
+     //   mDateIntentFilter = new IntentFilter();
+//        mDateIntentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
+//        mDateIntentFilter.addAction(Intent.ACTION_DATE_CHANGED);
 
-//        final File sharedFolder = new File(getFilesDir(), SHARED_FOLDER);
-//        sharedFolder.mkdirs();
-//        sharedFile = new File(getExternalFilesDir(SHARED_FOLDER), filename);
-//        try {
-//            createFile(filename);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
-        //saveDate();
-        //register Intents
-        this.registerReceiver(genericReceiver, new IntentFilter(CONNECTIVITY_ACTION));
-        this.registerReceiver(genericReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
-        this.registerReceiver(genericReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
 
+//        //saveDate();
+//        //register Intents
+       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(CONNECTIVITY_ACTION));
+       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
+       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
+//
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DATE_HAS_CHANGED);
+        intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 //writeFile("MainActivityReceiver", intent);
+                Log.i(TAG, intent.getAction());
                 if (intent.getAction().equals(DATE_HAS_CHANGED)) {
-                    Utilities.saveWaterEntry(context);
-                    Utilities.setWaterCount(context, 0);
+                 //   Utilities.saveWaterEntry(context);
+                 //   Utilities.setWaterCount(context, 0);
                     updateWaterCount();
                 } else if (intent.getAction().equals(NETWORK_AVAILABLE_ACTION)) {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
@@ -167,6 +165,30 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+        //IntentFilter ifilter = new IntentFilter(Intent.ACTION_DATE_CHANGED);
+        //Intent currentBatteryStatusIntent = registerReceiver(null, ifilter);
+       // Log.i("Intent1", "Getting one intent 22" + currentBatteryStatusIntent);
+
+
+
+        //IntentFilter ifilter2 = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        // COMPLETED (6) Set a new Intent object equal to what is returned by registerReceiver, passing in null
+        // for the receiver. Pass in your intent filter as well. Passing in null means that you're
+        // getting the current state of a sticky broadcast - the intent returned will contain the
+        // battery information you need.
+        //Intent currentBatteryStatusIntent2 = registerReceiver(null, ifilter2);
+        // COMPLETED (7) Get the integer extra BatteryManager.EXTRA_STATUS. Check if it matches
+        // BatteryManager.BATTERY_STATUS_CHARGING or BatteryManager.BATTERY_STATUS_FULL. This means
+        // the battery is currently charging.
+       // int batteryStatus = currentBatteryStatusIntent2.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+       // boolean isCharging = batteryStatus == BatteryManager.BATTERY_STATUS_CHARGING ||
+         //       batteryStatus == BatteryManager.BATTERY_STATUS_FULL;
+
+       // Log.i("Intent1", "Getting one intent 33" + isCharging);
+      //  int batteryStatus = currentBatteryStatusIntent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+      //  Log.i("Intent1", "Getting one battery 22" + batteryStatus);
+        // COMPLETED (8) Update the UI using your showCharging method
+       // registerReceiver(mDateBroadcastReceiver, mDateIntentFilter);
     }
 
     private void initializeFireBaseJob(SharedPreferences sharedPreferences) {
@@ -185,11 +207,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-        unregisterReceiver(genericReceiver);
+       // unregisterReceiver(genericReceiver);
     }
 
     public void updateWaterCount() {
@@ -204,6 +231,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onInputMainFragment(int input) {
         mainFragment.updateNetworkDisplay(input);
+    }
+
+
+    private class DateBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.i("Intent1", "Getting one intent 11" + action);
+            //   Utilities.saveWaterEntry(context);
+//                 //   Utilities.setWaterCount(context, 0);
+           // showCharging(isCharging);
+        }
     }
 
 //    public void saveDate() {

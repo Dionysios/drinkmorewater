@@ -8,20 +8,29 @@ import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.dionpapas.drinkyourwater.MainActivity;
-
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class GenericReceiver extends BroadcastReceiver {
     public static final String NETWORK_AVAILABLE_ACTION = "com.dionpapas.drinkyourwater.NetworkAvailable";
     public static final String IS_NETWORK_AVAILABLE = "isNetworkAvailable";
     public static final String DATE_HAS_CHANGED = "com.dionpapas.drinkyourwater.dateHasChanged";
+    private static final String TAG = "GenericReceiver1";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("TAG", "Getting intent 3" + intent.getAction());
+        //Log.d(TAG, intent.getAction());
       //  MainActivity.writeFile("GeneralReceiver", intent);
-        if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
+        if (intent.getAction().equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
+//            Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
+//            networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
+//            LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
+
+            Log.i(TAG, intent.getAction());
+            Intent dateIntent = new Intent(DATE_HAS_CHANGED);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
+            Log.i(TAG, intent.getAction());
+        } else if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
+            Log.d(TAG, intent.getAction());
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
