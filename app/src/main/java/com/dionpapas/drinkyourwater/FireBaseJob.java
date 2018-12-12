@@ -22,7 +22,7 @@ public class FireBaseJob {
     public static final String FIREBASE_REMINDER_TAG = "my-unique-tag";
 
 
-    synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging, String REMINDER_INTERVAL , String todaysdate) {
+    synchronized public static void initiaze(@NonNull final Context context, boolean active, boolean connectedWifi, boolean isCharging, String REMINDER_INTERVAL) {
         int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(Integer.parseInt(REMINDER_INTERVAL)));
         Log.i("TAG", "onStartJob the time incoming" + REMINDER_INTERVAL_SECONDS );
         Driver driver = new GooglePlayDriver(context);
@@ -30,12 +30,6 @@ public class FireBaseJob {
         if (!active) {
             cancelAllReminders(context);
         } else {
-            if (checkIfDateHasChanged(todaysdate)){
-                Utilities.saveWaterEntry(context);
-                Utilities.setWaterCount(context, 0);
-            }
-            Log.i("TAG", "onStartJob initialize with" + active);
-            Log.i("TAG", "onStartJob getting values here" + connectedWifi + "I am charging" + isCharging);
             Job constraintReminderJob = firebaseJobDispatcher.newJobBuilder()
                     .setService(ReminderService.class)
                     .setTag(FIREBASE_REMINDER_TAG)
@@ -55,9 +49,5 @@ public class FireBaseJob {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
         firebaseJobDispatcher.cancel(FIREBASE_REMINDER_TAG);
-    }
-
-    public static boolean checkIfDateHasChanged(String todaysDate){
-        return (Utilities.getTodaysDate().equals(todaysDate)) ? true : false;
     }
 }

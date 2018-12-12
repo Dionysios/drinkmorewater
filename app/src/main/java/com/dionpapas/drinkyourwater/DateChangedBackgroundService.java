@@ -7,8 +7,11 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
+
 public class DateChangedBackgroundService extends Service {
     private DateChangedReceiver dateChangedReceiver = null;
+    private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
 
     @Nullable
     @Override
@@ -30,6 +33,10 @@ public class DateChangedBackgroundService extends Service {
 
         // Add network connectivity change action.
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        intentFilter.addAction(CONNECTIVITY_ACTION);
+        intentFilter.addAction(WIFI_STATE_CHANGE_ACTION);
 
         // Set broadcast receiver priority.
         intentFilter.setPriority(100);
@@ -37,7 +44,7 @@ public class DateChangedBackgroundService extends Service {
         dateChangedReceiver = new DateChangedReceiver();
         // Register the broadcast receiver with the intent filter object.
         registerReceiver(dateChangedReceiver, intentFilter);
-        Log.d(DateChangedReceiver.SCREEN_TOGGLE_TAG, "Service onCreate: dateChangedReceiver is registered.");
+        Log.d(DateChangedReceiver.BroacastFound, "Service onCreate: dateChangedReceiver is registered.");
     }
 
     @Override
@@ -47,7 +54,7 @@ public class DateChangedBackgroundService extends Service {
         // Unregister dateChangedReceiver when destroy.
         if(dateChangedReceiver !=null) {
             unregisterReceiver(dateChangedReceiver);
-            Log.d(DateChangedReceiver.SCREEN_TOGGLE_TAG, "Service onDestroy: dateChangedReceiver is unregistered.");
+            Log.d(DateChangedReceiver.BroacastFound, "Service onDestroy: dateChangedReceiver is unregistered.");
         }
     }
 }

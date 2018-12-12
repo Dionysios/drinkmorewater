@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Intent backgroundService = new Intent(getApplicationContext(), DateChangedBackgroundService.class);
         startService(backgroundService);
+        Log.d(DateChangedReceiver.BroacastFound, "Activity onCreate");
        // genericReceiver = new GenericReceiver();
       //  mDateBroadcastReceiver = new DateBroadcastReceiver();
      //   mDateIntentFilter = new IntentFilter();
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
        // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
 //
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DATE_HAS_CHANGED);
         intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
 
@@ -87,12 +87,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onReceive(Context context, Intent intent) {
                 //writeFile("MainActivityReceiver", intent);
+                Log.d(DateChangedReceiver.BroacastFound, "Here receiving in MainActivity " + intent.getAction());
                 Log.i(TAG, intent.getAction());
-                if (intent.getAction().equals(DATE_HAS_CHANGED)) {
-                 //   Utilities.saveWaterEntry(context);
-                 //   Utilities.setWaterCount(context, 0);
-                    updateWaterCount();
-                } else if (intent.getAction().equals(NETWORK_AVAILABLE_ACTION)) {
+                if (intent.getAction().equals(NETWORK_AVAILABLE_ACTION)) {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")) {
@@ -166,8 +163,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 sharedPreferences.getBoolean(getString(R.string.enable_notif_key), getResources().getBoolean(R.bool.pref_enable_notif)),
                 sharedPreferences.getBoolean(getString(R.string.notif_on_wifi_key), getResources().getBoolean(R.bool.pref_on_wifi)),
                 sharedPreferences.getBoolean(getString(R.string.notif_when_charging_key), getResources().getBoolean(R.bool.pref_when_charg)),
-                sharedPreferences.getString(getString(R.string.interval_key), getString(R.string.interval_value)),
-                sharedPreferences.getString("DATE", ""));
+                sharedPreferences.getString(getString(R.string.interval_key), getString(R.string.interval_value)));
     }
 
     private void setupSharedPreferences() {
@@ -186,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-       // unregisterReceiver(genericReceiver);
+
     }
 
     public void updateWaterCount() {
