@@ -1,20 +1,13 @@
 package com.dionpapas.drinkyourwater;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.dionpapas.drinkyourwater.utilities.Utilities;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
-
 public class ReminderService extends JobService {
-s
     /**
      * This asynctask will run a job once conditions are met with the constraints
      * As soon as user device gets connected with the power supply. it will generate

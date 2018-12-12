@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.dionpapas.drinkyourwater.fragments.MainFragment;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;

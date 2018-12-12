@@ -21,14 +21,9 @@ public class GenericReceiver extends BroadcastReceiver {
         //Log.d(TAG, intent.getAction());
       //  MainActivity.writeFile("GeneralReceiver", intent);
         if (intent.getAction().equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
-//            Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
-//            networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
-//            LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
-
-            Log.i(TAG, intent.getAction());
-            Intent dateIntent = new Intent(DATE_HAS_CHANGED);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(dateIntent);
-            Log.i(TAG, intent.getAction());
+            Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
+            networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
         } else if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
             Log.d(TAG, intent.getAction());
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
