@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,10 +20,26 @@ public class MainFragment extends Fragment {
 
     private TextView mWaterCountDisplay, mNetworkDisplay;
     private ImageView mImageView;
-    private FragmentMainListener listener;
+    // Define a new interface OnImageClickListener that triggers a callback in the host activity
+    OnImageClickListener mCallbackClick;
 
-    public interface FragmentMainListener {
-        void onInputMainFragment(int input);
+    // OnImageClickListener interface, calls a method in the host activity named onImageSelected
+    public interface OnImageClickListener {
+        void onImageClicked();
+    }
+    // Override onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mCallbackClick = (OnImageClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnImageClickListener");
+        }
     }
 
 
@@ -30,57 +47,50 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
      //  return inflater.inflate(R.layout.fragment_main, container, false);
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
-        ((MainActivity) getActivity()).updateWaterCount();
-        mWaterCountDisplay = view.findViewById(R.id.tv_water_count);
-        mNetworkDisplay = view.findViewById(R.id.tv_networkView);
-        mImageView = view.findViewById(R.id.ib_water_increment);
-        updateWaterCount( Utilities.getWaterCount(getContext()));
-        updateNetworkDisplay(View.INVISIBLE);
-        mImageView.setOnClickListener(new View.OnClickListener() {
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final ImageView mImageView = (ImageView) rootView.findViewById(R.id.ib_water_increment);
+      //  ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.app_name_2));
+      //  ((MainActivity) getActivity()).updateWaterCount();
+        mWaterCountDisplay = rootView.findViewById(R.id.tv_water_count);
+        mNetworkDisplay = rootView.findViewById(R.id.tv_networkView);
+        //mImageView = view.findViewById(R.id.ib_water_increment);
+        //updateWaterCount( Utilities.getWaterCount(getContext()));
+        //updateNetworkDisplay(View.INVISIBLE);
+//        mImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("ADD", "Here 0");
+//                Utilities.incrementWaterCount(getContext());
+//            }
+//        });
+
+        mImageView.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
+                // Trigger the callback method and pass in the position that was clicked
                 Log.i("ADD", "Here 0");
-                Utilities.incrementWaterCount(getContext());
+                mCallbackClick.onImageClicked();
             }
         });
 
-        return view;
+        return rootView;
     }
 
-    public void updateNetworkDisplay(int status) {
-        Log.i("ADD", "Sending visibility" + status);
-        if (mNetworkDisplay != null) {
-            mNetworkDisplay.setVisibility(status);
-        } else {
-            Log.i("ADD", "Sending visibility" + status + "everything is null");
-        }
-    }
+//    public void updateNetworkDisplay(int status) {
+//        Log.i("ADD", "Sending visibility" + status);
+//        if (mNetworkDisplay != null) {
+//            mNetworkDisplay.setVisibility(status);
+//        } else {
+//            Log.i("ADD", "Sending visibility" + status + "everything is null");
+//        }
+//    }
 
-    public void updateWaterCount(int waterCount) {
-        if (mWaterCountDisplay != null) {
-            mWaterCountDisplay.setText(waterCount+"");
-            //mNetworkDisplay.setVisibility(status);
-        } else {
-            Log.i("ADD", "Sending water count " + waterCount + "everything is null");
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FragmentMainListener) {
-            listener = (FragmentMainListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement FragmentAListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
+//    public void updateWaterCount(int waterCount) {
+//        if (mWaterCountDisplay != null) {
+//            mWaterCountDisplay.setText(waterCount+"");
+//            //mNetworkDisplay.setVisibility(status);
+//        } else {
+//            Log.i("ADD", "Sending water count " + waterCount + "everything is null");
+//        }
+//    }
 }

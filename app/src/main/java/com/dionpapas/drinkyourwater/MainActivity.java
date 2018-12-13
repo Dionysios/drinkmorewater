@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.fragments.CupFragment;
@@ -31,13 +33,12 @@ import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CH
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.NETWORK_AVAILABLE_ACTION;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener, MainFragment.FragmentMainListener {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener,
+        MainFragment.OnImageClickListener,  CupFragment.OnImageClickListener {
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
     private GenericReceiver genericReceiver;
     private AppDatabase mDb;
     private DrawerLayout drawer;
-    private MainFragment mainFragment;
-    IntentFilter mDateIntentFilter;
 
     private static final String TAG = "GenericReceiverMain";
 
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mainFragment = new MainFragment();
         setupSharedPreferences();
         mDb = AppDatabase.getInstance(getApplicationContext());
 
@@ -93,18 +93,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")) {
-                        onInputMainFragment(View.VISIBLE);
+                       // onInputMainFragment(View.VISIBLE);
                     } else {
-                        onInputMainFragment(View.INVISIBLE);
+                       // onInputMainFragment(View.INVISIBLE);
                     }
                 }
             }
         }, intentFilter);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    mainFragment).commit();
-            navigationView.setCheckedItem(R.id.nav_main);
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    mainFragment).commit();
+//            navigationView.setCheckedItem(R.id.nav_main);
+//        }
+
+        if(savedInstanceState == null) {
+
+            // Create a new head BodyPartFragment
+            MainFragment mainFragment = new MainFragment ();
+
+            // Set the list of image id's for the head fragment and set the position to the second image in the list
+            //headFragment.setImageIds(AndroidImageAssets.getHeads());
+            // headFragment.setListIndex(1);
+
+            // Add the fragment to its container using a FragmentManager and a Transaction
+            getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
+                    mainFragment).commit ();
+            navigationView.setCheckedItem (R.id.nav_main);
         }
     }
 
@@ -113,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        mainFragment).commit();
+                       new MainFragment()).commit();
                 break;
             case R.id.nav_dairy:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -187,15 +202,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     public void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);
-        mainFragment.updateWaterCount(waterCount);
+       // mainFragment.updateWaterCount(waterCount);
     }
 
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
+//    @Override
+//    public void onInputMainFragment(int input) {
+//        mainFragment.updateNetworkDisplay(input);
+//    }
+
     @Override
-    public void onInputMainFragment(int input) {
-        mainFragment.updateNetworkDisplay(input);
+    public void onImageSelected(int position) {
+        Toast.makeText(this, "Position clicked = " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onImageClicked() {
+
     }
 }
