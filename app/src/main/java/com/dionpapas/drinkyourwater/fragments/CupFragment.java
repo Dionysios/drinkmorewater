@@ -18,11 +18,11 @@ import com.dionpapas.drinkyourwater.data.CupImageAssets;
 public class CupFragment extends Fragment {
 
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
-    OnImageClickListener mCallback;
+    OnImageCupClickListener mCallback;
 
     // OnImageClickListener interface, calls a method in the host activity named onImageSelected
-    public interface OnImageClickListener {
-        void onImageSelected(int position);
+    public interface OnImageCupClickListener {
+        void onImageCupSelected(int position);
     }
 
     // Override onAttach to make sure that the container activity has implemented the callback
@@ -33,7 +33,7 @@ public class CupFragment extends Fragment {
         // This makes sure that the host activity has implemented the callback interface
         // If not, it throws an exception
         try {
-            mCallback = (OnImageClickListener) context;
+            mCallback = (OnImageCupClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnImageClickListener");
@@ -42,8 +42,7 @@ public class CupFragment extends Fragment {
 
 
     // Mandatory empty constructor
-    public CupFragment() {
-    }
+    public CupFragment() { }
 
     // Inflates the GridView of all AndroidMe images
     @Override
@@ -67,7 +66,7 @@ public class CupFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // Trigger the callback method and pass in the position that was clicked
-                mCallback.onImageSelected(position);
+                mCallback.onImageCupSelected(position);
             }
         });
 

@@ -8,18 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dionpapas.drinkyourwater.MainActivity;
 import com.dionpapas.drinkyourwater.R;
-import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 public class MainFragment extends Fragment {
 
     private TextView mWaterCountDisplay, mNetworkDisplay;
-    private ImageView mImageView;
+    public static final String LIST_INDEX = "list_index";
+    private int mCount = 0 ;
+    //private ImageView mImageView;
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnImageClickListener mCallbackClick;
 
@@ -31,7 +30,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         // This makes sure that the host activity has implemented the callback interface
         // If not, it throws an exception
         try {
@@ -53,17 +51,17 @@ public class MainFragment extends Fragment {
       //  ((MainActivity) getActivity()).updateWaterCount();
         mWaterCountDisplay = rootView.findViewById(R.id.tv_water_count);
         mNetworkDisplay = rootView.findViewById(R.id.tv_networkView);
+
+//        if(savedInstanceState = null) {
+//            mCount = savedInstanceState.getInt(LIST_INDEX);
+//        }
+
+       // mWaterCountDisplay.setText(mCount.toString());
+        mWaterCountDisplay.setText(mCount+"");
         //mImageView = view.findViewById(R.id.ib_water_increment);
         //updateWaterCount( Utilities.getWaterCount(getContext()));
         //updateNetworkDisplay(View.INVISIBLE);
-//        mImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i("ADD", "Here 0");
-//                Utilities.incrementWaterCount(getContext());
-//            }
-//        });
-
+        //todo NetworkDisplay currently not working
         mImageView.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View v) {
@@ -76,6 +74,14 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    public void setWaterCount(int count) {
+        mCount = count;
+    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle currentState) {
+//        currentState.putInt(LIST_INDEX, mCount);
+//    }
 //    public void updateNetworkDisplay(int status) {
 //        Log.i("ADD", "Sending visibility" + status);
 //        if (mNetworkDisplay != null) {
