@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-
-
         Intent backgroundService = new Intent(getApplicationContext(), DateChangedBackgroundService.class);
         startService(backgroundService);
         Log.d(DateChangedReceiver.BroacastFound, "Activity onCreate");
@@ -73,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      //   mDateIntentFilter = new IntentFilter();
 //        mDateIntentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
 //        mDateIntentFilter.addAction(Intent.ACTION_DATE_CHANGED);
-
-
 
 //        //saveDate();
 //        //register Intents
@@ -104,27 +100,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }, intentFilter);
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    mainFragment).commit();
-//            navigationView.setCheckedItem(R.id.nav_main);
-//        }
-
         if(savedInstanceState == null) {
-
-
-            Utilities.setWaterCount(this, 0);
-            // Create a new head BodyPartFragment
-
-            // Set the list of image id's for the head fragment and set the position to the second image in the list
-            //headFragment.setImageIds(AndroidImageAssets.getHeads());
-            // headFragment.setListIndex(1);
-
-            // Add the fragment to its container using a FragmentManager and a Transaction
-            getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
-                    mainFragment).commit ();
-            navigationView.setCheckedItem (R.id.nav_main);
+            updateWaterCount();
         }
+        getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
+                mainFragment).commit ();
+        navigationView.setCheckedItem (R.id.nav_main);
     }
 
     @Override
@@ -207,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void updateWaterCount() {
         int waterCount = Utilities.getWaterCount(this);
         mainFragment.setWaterCount(waterCount);
-       // mainFragment.updateWaterCount(waterCount);
     }
 
     public void setActionBarTitle(String title) {

@@ -17,7 +17,7 @@ public class MainFragment extends Fragment {
 
     private TextView mWaterCountDisplay, mNetworkDisplay;
     public static final String LIST_INDEX = "list_index";
-    private int mCount = 0 ;
+    private int mCount;
     //private ImageView mImageView;
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnImageClickListener mCallbackClick;
@@ -52,12 +52,13 @@ public class MainFragment extends Fragment {
         mWaterCountDisplay = rootView.findViewById(R.id.tv_water_count);
         mNetworkDisplay = rootView.findViewById(R.id.tv_networkView);
 
-//        if(savedInstanceState = null) {
-//            mCount = savedInstanceState.getInt(LIST_INDEX);
-//        }
+        if(savedInstanceState != null) {
+            mCount = savedInstanceState.getInt(LIST_INDEX);
+            //mWaterCountDisplay.setText(mCount+"");
+        }
 
-       // mWaterCountDisplay.setText(mCount.toString());
         mWaterCountDisplay.setText(mCount+"");
+
         //mImageView = view.findViewById(R.id.ib_water_increment);
         //updateWaterCount( Utilities.getWaterCount(getContext()));
         //updateNetworkDisplay(View.INVISIBLE);
@@ -67,7 +68,9 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 // Trigger the callback method and pass in the position that was clicked
                 Log.i("ADD", "Here 0");
+                mCount++;
                 mCallbackClick.onImageClicked();
+                mWaterCountDisplay.setText(mCount+"");
             }
         });
 
@@ -78,10 +81,10 @@ public class MainFragment extends Fragment {
         mCount = count;
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle currentState) {
-//        currentState.putInt(LIST_INDEX, mCount);
-//    }
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        currentState.putInt(LIST_INDEX, mCount);
+    }
 //    public void updateNetworkDisplay(int status) {
 //        Log.i("ADD", "Sending visibility" + status);
 //        if (mNetworkDisplay != null) {
