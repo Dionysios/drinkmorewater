@@ -15,9 +15,10 @@ import com.dionpapas.drinkyourwater.R;
 
 public class MainFragment extends Fragment {
 
-    private TextView mWaterCountDisplay, mNetworkDisplay;
+    public TextView mWaterCountDisplay, mNetworkDisplay;
     public static final String LIST_INDEX = "list_index";
     private int mCount;
+    private boolean isActive;
     //private ImageView mImageView;
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnImageClickListener mCallbackClick;
@@ -25,6 +26,8 @@ public class MainFragment extends Fragment {
     // OnImageClickListener interface, calls a method in the host activity named onImageSelected
     public interface OnImageClickListener {
         void onImageClicked();
+
+        void showNetworkStatusView(Boolean isActive);
     }
     // Override onAttach to make sure that the container activity has implemented the callback
     @Override
@@ -58,6 +61,11 @@ public class MainFragment extends Fragment {
         }
 
         mWaterCountDisplay.setText(mCount+"");
+        if (isActive) {
+            mNetworkDisplay.setVisibility(View.VISIBLE);
+        } else {
+            mNetworkDisplay.setVisibility(View.INVISIBLE);
+        }
 
         //mImageView = view.findViewById(R.id.ib_water_increment);
         //updateWaterCount( Utilities.getWaterCount(getContext()));
@@ -79,6 +87,10 @@ public class MainFragment extends Fragment {
 
     public void setWaterCount(int count) {
         mCount = count;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

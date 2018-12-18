@@ -92,9 +92,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")) {
-                       // onInputMainFragment(View.VISIBLE);
+                       //onInputMainFragment(View.VISIBLE);
+                        //showNetworkStatusView(false);
+                        mainFragment.mNetworkDisplay.setVisibility(View.VISIBLE);
                     } else {
                        // onInputMainFragment(View.INVISIBLE);
+                       mainFragment.mNetworkDisplay.setVisibility(View.INVISIBLE);
+                        //showNetworkStatusView(true);
                     }
                 }
             }
@@ -182,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-
     }
 
     public void updateWaterCount() {
@@ -203,4 +206,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onImageClicked() {
         Utilities.incrementWaterCount(this);
     }
+
+    @Override
+    public void showNetworkStatusView(Boolean isActive) {
+        mainFragment.setActive(isActive);
+    }
+
+//    @Override
+//    public void showNetworkStatusView(boolean isActive) {
+//        mainFragment.setActive(isActive);
+//    }
 }
