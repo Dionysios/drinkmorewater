@@ -40,14 +40,6 @@ public class Utilities {
         Log.i("ADD", "Here 2");
     }
 
-    synchronized public static int returnWaterCount(Context context) {
-        int waterCount = Utilities.getWaterCount(context);
-        Log.i("ADD", "Here 1");
-        Utilities.setWaterCount(context, ++waterCount);
-        Log.i("ADD", "Here 2");
-        return waterCount;
-    }
-
     public static void saveWaterEntry(Context context) {
         Log.d(DateChangedReceiver.BroacastFound, "Saving entry");
         mDb = AppDatabase.getInstance(context);
@@ -63,9 +55,9 @@ public class Utilities {
         });
     }
 
-    public static String getTodaysDate(){
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
-        return currentDate;
-    }
+//    public static String getTodaysDate(){
+//        Calendar calendar = Calendar.getInstance();
+//        String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
+//        return currentDate;
+//    }
 }

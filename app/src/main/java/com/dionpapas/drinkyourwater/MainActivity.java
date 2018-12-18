@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if(savedInstanceState == null) {
             updateWaterCount();
         }
+
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
@@ -155,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        updateWaterCount();
     }
 
     private void initializeFireBaseJob(SharedPreferences sharedPreferences) {
