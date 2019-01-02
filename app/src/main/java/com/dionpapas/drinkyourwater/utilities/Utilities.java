@@ -62,10 +62,4 @@ public class Utilities {
             }
         });
     }
-
-    public static String getTodaysDate(){
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
-        return currentDate;
-    }
 }

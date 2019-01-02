@@ -1,5 +1,8 @@
 package com.dionpapas.drinkyourwater;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +32,9 @@ import com.dionpapas.drinkyourwater.fragments.SettingsFragment;
 import com.dionpapas.drinkyourwater.utilities.GenericReceiver;
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
+import java.util.Calendar;
+
+import static com.dionpapas.drinkyourwater.AlarmReceiver.RESTART_COUNTER;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.DATE_HAS_CHANGED;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.IS_NETWORK_AVAILABLE;
 import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.NETWORK_AVAILABLE_ACTION;
@@ -40,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppDatabase mDb;
     private DrawerLayout drawer;
     MainFragment mainFragment;
+    //Pending intent instance
+    private PendingIntent pendingIntent;
+    //Alarm Request Code
+    private static final int ALARM_REQUEST_CODE = 133;
 
     private static final String TAG = "GenericReceiverMain";
 
@@ -66,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Intent backgroundService = new Intent(getApplicationContext(), DateChangedBackgroundService.class);
         startService(backgroundService);
         Log.d(DateChangedReceiver.BroacastFound, "Activity onCreate");
+
+
+        /* Retrieve a PendingIntent that will perform a broadcast */
+        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, ALARM_REQUEST_CODE, alarmIntent, 0);
        // genericReceiver = new GenericReceiver();
       //  mDateBroadcastReceiver = new DateBroadcastReceiver();
      //   mDateIntentFilter = new IntentFilter();
@@ -81,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
+        intentFilter.addAction(RESTART_COUNTER);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
@@ -106,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
+        triggerAlarmManager(getTimeInterval("60"));
     }
 
     @Override
@@ -203,4 +220,44 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onImageClicked() {
         Utilities.incrementWaterCount(this);
     }
+
+    //get time interval to trigger alarm manager
+    private int getTimeInterval(String getInterval) {
+        int interval = Integer.parseInt(getInterval);//convert string interval into integer
+//        //Return interval on basis of radio button selection
+//        if (secondsRadioButton.isChecked())
+//            return interval;
+//        if (minutesRadioButton.isChecked())
+//            return interval * 60;//convert minute into seconds
+//        if (hoursRadioButton.isChecked()) return interval * 60 * 60;//convert hours into seconds
+        //else return 0
+        return interval;
+    }
+
+
+    //Trigger alarm manager with entered time interval
+    public void triggerAlarmManager(int alarmTriggerTime) {
+        // get a Calendar object with current time
+        Calendar cal = Calendar.getInstance();
+        // add alarmTriggerTime seconds to the calendar object
+        cal.add(Calendar.SECOND, alarmTriggerTime);
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);//get instance of alarm manager
+        manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);//set alarm manager with entered timer by converting into milliseconds
+
+        Toast.makeText(this, "Alarm Set for " + alarmTriggerTime + " seconds.", Toast.LENGTH_SHORT).show();
+    }
+
+    //Stop/Cancel alarm manager
+//    public void stopAlarmManager() {
+//        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        manager.cancel(pendingIntent);//cancel the alarm manager of the pending intent
+//        //Stop the Media Player Service to stop sound
+//        stopService(new Intent(MainActivity.this, RestartCounterService.class));
+//        //remove the notification from notification tray
+//        NotificationManager notificationManager = (NotificationManager) this
+//                .getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
+//        Toast.makeText(this, "Alarm Canceled/Stop by User.", Toast.LENGTH_SHORT).show();
+//    }
 }

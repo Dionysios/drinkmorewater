@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application
@@ -43,6 +44,14 @@
             </intent-filter>
         </service>
         <service android:enabled="true" android:name=".DateChangedBackgroundService" />
+        <!--  Declare  Alarm Broadcast receiver here  -->
+        <receiver android:name=".AlarmReceiver" />
+
+        <!--  Declare  Alarm Notification Service here  -->
+        <service android:name=".AlarmNotificationService" />
+
+        <!--  Declare  Alarm Sound Service here  -->
+        <service android:name=".RestartCounterService" />
     </application>
 
 </manifest>
