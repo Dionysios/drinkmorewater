@@ -32,6 +32,7 @@ public class DateChangedReceiver extends BroadcastReceiver {
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
             Utilities.saveWaterEntry(context);
             Utilities.setWaterCount(context, 0);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
         } else if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
             Log.d(BroacastFound, intent.getAction());
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);

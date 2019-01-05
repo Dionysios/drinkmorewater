@@ -108,9 +108,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
                     String networkStatus = isNetworkAvailable ? "connected" : "disconnected";
                     if (networkStatus.equals("disconnected")) {
-                       // onInputMainFragment(View.VISIBLE);
+                       //onInputMainFragment(View.VISIBLE);
+                        //showNetworkStatusView(false);
+                        mainFragment.mNetworkDisplay.setVisibility(View.VISIBLE);
                     } else {
                        // onInputMainFragment(View.INVISIBLE);
+                       mainFragment.mNetworkDisplay.setVisibility(View.INVISIBLE);
+                        //showNetworkStatusView(true);
                     }
                 }
             }
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if(savedInstanceState == null) {
             updateWaterCount();
         }
+
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
@@ -172,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        updateWaterCount();
     }
 
     private void initializeFireBaseJob(SharedPreferences sharedPreferences) {
@@ -199,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).
                 unregisterOnSharedPreferenceChangeListener(this);
-
     }
 
     public void updateWaterCount() {
@@ -259,5 +262,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 //                .getSystemService(Context.NOTIFICATION_SERVICE);
 //        notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
 //        Toast.makeText(this, "Alarm Canceled/Stop by User.", Toast.LENGTH_SHORT).show();
-//    }
+
+    @Override
+    public void showNetworkStatusView(Boolean isActive) {
+        mainFragment.setActive(isActive);
+    }
 }
