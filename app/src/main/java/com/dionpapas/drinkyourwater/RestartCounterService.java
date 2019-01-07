@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.dionpapas.drinkyourwater.utilities.Utilities;
 
@@ -19,20 +20,12 @@ public class RestartCounterService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //
         Utilities.setWaterCount(this,0 );
+        Log.i("Here is Alarm", "here is alarm1");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-//        //On destory stop and release the media player
-//        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-//            mediaPlayer.stop();
-//            mediaPlayer.reset();
-//            mediaPlayer.release();
-//        }
     }
 }

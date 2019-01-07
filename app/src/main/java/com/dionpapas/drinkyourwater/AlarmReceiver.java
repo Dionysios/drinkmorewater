@@ -14,18 +14,18 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("Alarm", "alarm");
+        Log.i("Here is Alarm", "here is alarm");
        // Intent restartCounterIntent = new Intent(RESTART_COUNTER);
        // LocalBroadcastManager.getInstance(context).sendBroadcast(restartCounterIntent);
-        Toast.makeText(context, "ALARM!! ALARM!!", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "ALARM!! ALARM!!", Toast.LENGTH_SHORT).show();
 
         //Stop sound service to play sound for alarm
         context.startService(new Intent(context, RestartCounterService.class));
 
-        //This will send a notification message and show notification in notification tray
-        ComponentName comp = new ComponentName(context.getPackageName(),
-                AlarmNotificationService.class.getName());
-        startWakefulService(context, (intent.setComponent(comp)));
+//        //This will send a notification message and show notification in notification tray
+//        ComponentName comp = new ComponentName(context.getPackageName(),
+//                AlarmNotificationService.class.getName());
+//        startWakefulService(context, (intent.setComponent(comp)));
     }
 
 

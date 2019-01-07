@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
-        triggerAlarmManager(getTimeInterval("60"));
+        triggerAlarmManager(getTimeInterval("120"));
     }
 
     @Override
@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+        getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
+                mainFragment).commit ();
     }
 
     private void initializeFireBaseJob(SharedPreferences sharedPreferences) {
