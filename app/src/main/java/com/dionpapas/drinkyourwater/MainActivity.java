@@ -1,5 +1,7 @@
 package com.dionpapas.drinkyourwater;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
@@ -18,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
@@ -26,6 +29,7 @@ import com.dionpapas.drinkyourwater.utilities.Utilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppDatabase mDb;
 
     private BroadcastReceiver dateReceiver;
+
+    //Pending intent instance
+    private PendingIntent pendingIntent;
+    //Alarm Request Code
+    private static final int ALARM_REQUEST_CODE = 133;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         registerReceiver(networkStateChangeReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
         registerReceiver(networkStateChangeReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
         IntentFilter intentFilter = new IntentFilter(NetworkReceiver.NETWORK_AVAILABLE_ACTION);
+
+
+
+        /* Retrieve a PendingIntent that will perform a broadcast */
+        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, ALARM_REQUEST_CODE, alarmIntent, 0);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
@@ -97,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 dateReceiver,
                 new IntentFilter(Intent.ACTION_TIME_CHANGED)
         );
+
+        triggerAlarmManager(getTimeInterval("120"));
     }
 
     private void setupSharedPreferences() {
@@ -173,4 +190,29 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utilities.saveWaterEntry(this);
     }
 
+
+    private int getTimeInterval(String getInterval) {
+        int interval = Integer.parseInt(getInterval);//convert string interval into integer
+//        //Return interval on basis of radio button selection
+//        if (secondsRadioButton.isChecked())
+//            return interval;
+//        if (minutesRadioButton.isChecked())
+//            return interval * 60;//convert minute into seconds
+//        if (hoursRadioButton.isChecked()) return interval * 60 * 60;//convert hours into seconds
+        //else return 0
+        return interval;
+    }
+
+    //Trigger alarm manager with entered time interval
+    public void triggerAlarmManager(int alarmTriggerTime) {
+        // get a Calendar object with current time
+        Calendar cal = Calendar.getInstance();
+        // add alarmTriggerTime seconds to the calendar object
+        cal.add(Calendar.SECOND, alarmTriggerTime);
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);//get instance of alarm manager
+        manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);//set alarm manager with entered timer by converting into milliseconds
+
+        Toast.makeText(this, "Alarm Set for " + alarmTriggerTime + " seconds.", Toast.LENGTH_SHORT).show();
+    }
 }
