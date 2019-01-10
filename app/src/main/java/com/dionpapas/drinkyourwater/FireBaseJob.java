@@ -37,7 +37,7 @@ public class FireBaseJob {
                             isCharging ? Constraint.DEVICE_CHARGING : 0)
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
-                    .setTrigger(Trigger.executionWindow(100,100 + SYNC_FLEXTIME_SECONDS))
+                    .setTrigger(Trigger.executionWindow(REMINDER_INTERVAL_SECONDS,REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
                     .setReplaceCurrent(true)
                     .build();
             firebaseJobDispatcher.schedule(constraintReminderJob);
