@@ -5,12 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dionpapas.drinkyourwater.DateChangedReceiver;
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
 
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Utilities {
@@ -20,7 +17,6 @@ public class Utilities {
     private static AppDatabase mDb;
 
     synchronized public static void setWaterCount(Context context, int glassesOfWater) {
-        Log.d(DateChangedReceiver.BroacastFound, "Sending entry");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(KEY_WATER_COUNT, glassesOfWater);
@@ -41,7 +37,6 @@ public class Utilities {
     }
 
     public static void saveWaterEntry(Context context) {
-        Log.d(DateChangedReceiver.BroacastFound, "Saving entry");
         mDb = AppDatabase.getInstance(context);
         int counter = getWaterCount(context);
         Date date = new Date();

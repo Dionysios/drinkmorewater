@@ -20,6 +20,7 @@ public class RestartCounterService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Utilities.saveWaterEntry (this);
         Utilities.setWaterCount(this,0 );
         Log.i("Here is Alarm", "here is alarm1");
     }

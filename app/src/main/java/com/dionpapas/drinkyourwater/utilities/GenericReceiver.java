@@ -25,7 +25,6 @@ public class GenericReceiver extends BroadcastReceiver {
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);
         } else if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
-            Log.d(TAG, intent.getAction());
             Intent networkStateIntent = new Intent(NETWORK_AVAILABLE_ACTION);
             networkStateIntent.putExtra(IS_NETWORK_AVAILABLE, isConnectedToInternet(context));
             LocalBroadcastManager.getInstance(context).sendBroadcast(networkStateIntent);

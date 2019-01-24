@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,10 +18,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.i("Here is Alarm", "here is alarm");
        // Intent restartCounterIntent = new Intent(RESTART_COUNTER);
        // LocalBroadcastManager.getInstance(context).sendBroadcast(restartCounterIntent);
-       // Toast.makeText(context, "ALARM!! ALARM!!", Toast.LENGTH_SHORT).show();
+       Toast.makeText(context, "ALARM!! ALARM!!", Toast.LENGTH_SHORT).show();
 
         //Stop sound service to play sound for alarm
-        context.startService(new Intent(context, RestartCounterService.class));
+        //context.startService(new Intent(context, RestartCounterService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(new Intent(context, RestartCounterService.class));
+        } else {
+            context.startService(new Intent(context, RestartCounterService.class));
+        }
 
 //        //This will send a notification message and show notification in notification tray
 //        ComponentName comp = new ComponentName(context.getPackageName(),

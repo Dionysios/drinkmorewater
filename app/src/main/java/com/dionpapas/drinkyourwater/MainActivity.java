@@ -42,7 +42,7 @@ import static com.dionpapas.drinkyourwater.utilities.GenericReceiver.NETWORK_AVA
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener,
         MainFragment.OnImageClickListener,  CupFragment.OnImageCupClickListener {
     private static final String WIFI_STATE_CHANGE_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
-    private GenericReceiver genericReceiver;
+    //private GenericReceiver genericReceiver;
     private AppDatabase mDb;
     private DrawerLayout drawer;
     MainFragment mainFragment;
@@ -73,26 +73,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setupSharedPreferences();
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-        Intent backgroundService = new Intent(getApplicationContext(), DateChangedBackgroundService.class);
-        startService(backgroundService);
-        Log.d(DateChangedReceiver.BroacastFound, "Activity onCreate");
-
-
         /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, ALARM_REQUEST_CODE, alarmIntent, 0);
-       // genericReceiver = new GenericReceiver();
-      //  mDateBroadcastReceiver = new DateBroadcastReceiver();
-     //   mDateIntentFilter = new IntentFilter();
-//        mDateIntentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
-//        mDateIntentFilter.addAction(Intent.ACTION_DATE_CHANGED);
 
-//        //saveDate();
-//        //register Intents
-       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(CONNECTIVITY_ACTION));
-       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(WIFI_STATE_CHANGE_ACTION));
-       // this.registerReceiver(mDateBroadcastReceiver, new IntentFilter(Intent.ACTION_DATE_CHANGED));
-//
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         intentFilter.addAction(GenericReceiver.NETWORK_AVAILABLE_ACTION);
@@ -102,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onReceive(Context context, Intent intent) {
                 //writeFile("MainActivityReceiver", intent);
-                Log.d(DateChangedReceiver.BroacastFound, "Here receiving in MainActivity " + intent.getAction());
                 Log.i(TAG, intent.getAction());
                 if (intent.getAction().equals(NETWORK_AVAILABLE_ACTION)) {
                     boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
@@ -110,16 +93,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     if (networkStatus.equals("disconnected")) {
                        //onInputMainFragment(View.VISIBLE);
                         //showNetworkStatusView(false);
-                        mainFragment.mNetworkDisplay.setVisibility(View.VISIBLE);
+                        mainFragment.mNetworkDisplay.setVisibility(View.INVISIBLE);
                     } else {
                        // onInputMainFragment(View.INVISIBLE);
-                       mainFragment.mNetworkDisplay.setVisibility(View.INVISIBLE);
+                       mainFragment.mNetworkDisplay.setVisibility(View.VISIBLE);
                         //showNetworkStatusView(true);
                     }
                 }
             }
         }, intentFilter);
 
+        GenericReceiver genericReceiver = new GenericReceiver();
+        registerReceiver(genericReceiver, intentFilter);
         if(savedInstanceState == null) {
             updateWaterCount();
         }
@@ -127,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
-        triggerAlarmManager(getTimeInterval("120"));
+        triggerAlarmManager(getTimeInterval("3200"));
     }
 
     @Override
@@ -252,18 +237,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Toast.makeText(this, "Alarm Set for " + alarmTriggerTime + " seconds.", Toast.LENGTH_SHORT).show();
     }
-
-    //Stop/Cancel alarm manager
-//    public void stopAlarmManager() {
-//        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        manager.cancel(pendingIntent);//cancel the alarm manager of the pending intent
-//        //Stop the Media Player Service to stop sound
-//        stopService(new Intent(MainActivity.this, RestartCounterService.class));
-//        //remove the notification from notification tray
-//        NotificationManager notificationManager = (NotificationManager) this
-//                .getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.cancel(AlarmNotificationService.NOTIFICATION_ID);
-//        Toast.makeText(this, "Alarm Canceled/Stop by User.", Toast.LENGTH_SHORT).show();
 
     @Override
     public void showNetworkStatusView(Boolean isActive) {
