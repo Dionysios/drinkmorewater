@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     //Pending intent instance
     private PendingIntent pendingIntent;
     //Alarm Request Code
-    private static final int ALARM_REQUEST_CODE = 133;
+    public static final int ALARM_REQUEST_CODE = 133;
 
     private static final String TAG = "GenericReceiverMain";
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         getSupportFragmentManager ().beginTransaction ().replace (R.id.fragment_container,
                 mainFragment).commit ();
         navigationView.setCheckedItem (R.id.nav_main);
-        triggerAlarmManager(getTimeInterval("3200"));
+        triggerAlarmManager();
     }
 
     @Override
@@ -211,31 +211,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utilities.incrementWaterCount(this);
     }
 
-    //get time interval to trigger alarm manager
-    private int getTimeInterval(String getInterval) {
-        int interval = Integer.parseInt(getInterval);//convert string interval into integer
-//        //Return interval on basis of radio button selection
-//        if (secondsRadioButton.isChecked())
-//            return interval;
-//        if (minutesRadioButton.isChecked())
-//            return interval * 60;//convert minute into seconds
-//        if (hoursRadioButton.isChecked()) return interval * 60 * 60;//convert hours into seconds
-        //else return 0
-        return interval;
-    }
+//    //get time interval to trigger alarm manager
+//    private int getTimeInterval(String getInterval) {
+//        int interval = Integer.parseInt(getInterval);//convert string interval into integer
+////        //Return interval on basis of radio button selection
+////        if (secondsRadioButton.isChecked())
+////            return interval;
+////        if (minutesRadioButton.isChecked())
+////            return interval * 60;//convert minute into seconds
+////        if (hoursRadioButton.isChecked()) return interval * 60 * 60;//convert hours into seconds
+//        //else return 0
+//        return interval;
+//    }
 
 
     //Trigger alarm manager with entered time interval
-    public void triggerAlarmManager(int alarmTriggerTime) {
+    public void triggerAlarmManager() {
         // get a Calendar object with current time
         Calendar cal = Calendar.getInstance();
         // add alarmTriggerTime seconds to the calendar object
-        cal.add(Calendar.SECOND, alarmTriggerTime);
-
+        //cal.add(Calendar.SECOND, alarmTriggerTime);
+        cal.set(Calendar.HOUR_OF_DAY, 00);
+        cal.set(Calendar.MINUTE, 00);
+        cal.set(Calendar.SECOND, 00);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);//get instance of alarm manager
-        manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);//set alarm manager with entered timer by converting into milliseconds
-
-        Toast.makeText(this, "Alarm Set for " + alarmTriggerTime + " seconds.", Toast.LENGTH_SHORT).show();
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);//set alarm manager with entered timer by converting into milliseconds
+        Toast.makeText(this, "Alarm Set for seconds.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

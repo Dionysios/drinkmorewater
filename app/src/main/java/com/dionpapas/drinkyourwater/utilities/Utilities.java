@@ -3,7 +3,6 @@ package com.dionpapas.drinkyourwater.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
@@ -31,9 +30,7 @@ public class Utilities {
 
     synchronized public static void incrementWaterCount(Context context) {
         int waterCount = Utilities.getWaterCount(context);
-        Log.i("ADD", "Here 1");
         Utilities.setWaterCount(context, ++waterCount);
-        Log.i("ADD", "Here 2");
     }
 
     public static void saveWaterEntry(Context context) {
