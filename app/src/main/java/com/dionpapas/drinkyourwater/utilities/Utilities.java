@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.dionpapas.drinkyourwater.R;
 import com.dionpapas.drinkyourwater.database.AppDatabase;
 import com.dionpapas.drinkyourwater.database.WaterEntry;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 public class Utilities {
 
     public static final String KEY_WATER_COUNT = "water-count";
+    public static final String KEY_ALARM_ACTIVATED = "alarm";
     private static final int DEFAULT_COUNT = 0;
     private static AppDatabase mDb;
 
@@ -31,6 +33,13 @@ public class Utilities {
     synchronized public static void incrementWaterCount(Context context) {
         int waterCount = Utilities.getWaterCount(context);
         Utilities.setWaterCount(context, ++waterCount);
+    }
+
+    synchronized public static void setAlarmActive(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(context.getString(R.string.is_alarm_enabled), true);
+        editor.apply();
     }
 
     public static void saveWaterEntry(Context context) {

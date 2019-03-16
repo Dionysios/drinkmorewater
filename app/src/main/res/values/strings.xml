@@ -8,6 +8,7 @@
     <string name="water_increment_content_desc">Press to add water</string>
     <string name="enable_notif_title">Enable notifications</string>
     <string name="enable_notif_key" translatable="false">enable_notif</string>
+    <string name="is_alarm_enabled" translatable="false">is_alarm_enabled</string>
     <string name="notif_on_wifi_title">Notifications only on Wifi</string>
     <string name="notif_on_wifi_key" translatable="false">enable_on_wifi</string>
     <string name="notif_when_charging_title">Notification only when charging</string>

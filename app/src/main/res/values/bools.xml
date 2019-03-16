@@ -3,4 +3,5 @@
     <bool name="pref_enable_notif">true</bool>
     <bool name="pref_on_wifi">false</bool>
     <bool name="pref_when_charg">false</bool>
+    <bool name="pref_is_alarm_on">false</bool>
 </resources>
